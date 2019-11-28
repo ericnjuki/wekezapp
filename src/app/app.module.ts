@@ -12,6 +12,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppRoutingModule } from './app.routing';
 import { ComponentsModule } from './components/components.module';
+import { AuthGuard } from './services/auth-guard.service';
+import { AuthService } from './services/auth.service';
+import { HttpModule } from '@angular/http';
 
 
 @NgModule({
@@ -19,6 +22,7 @@ import { ComponentsModule } from './components/components.module';
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
+    HttpModule,
     ComponentsModule,
     NgbModule,
     RouterModule,
@@ -29,7 +33,7 @@ import { ComponentsModule } from './components/components.module';
     AdminLayoutComponent,
     AuthLayoutComponent
   ],
-  providers: [],
+  providers: [AuthGuard, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

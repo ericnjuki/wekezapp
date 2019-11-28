@@ -37,13 +37,13 @@
           <div class="text-center text-muted mb-4">
             <small>Or sign in with credentials</small>
           </div>
-          <form role="form">
+          <form role="form" #loginForm="ngForm">
             <div class="form-group mb-3">
               <div class="input-group input-group-alternative">
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                 </div>
-                <input class="form-control" placeholder="Email" type="email">
+                <input class="form-control" [(ngModel)]="username" name="username" placeholder="username" type="text" required autofocus>
               </div>
             </div>
             <div class="form-group">
@@ -51,9 +51,10 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                 </div>
-                <input class="form-control" placeholder="Password" type="password">
+                <input class="form-control" [(ngModel)]="password" name="password" placeholder="password" type="password" required>
               </div>
             </div>
+            <div *ngIf="invalidLogin" style="color: red;">Invalid username and/or password</div>
             <div class="custom-control custom-control-alternative custom-checkbox">
               <input class="custom-control-input" id=" customCheckLogin" type="checkbox">
               <label class="custom-control-label" for=" customCheckLogin">
@@ -61,7 +62,7 @@
               </label>
             </div>
             <div class="text-center">
-              <button type="button" class="btn btn-primary my-4">Sign in</button>
+              <button type="button" (click)="login()" class="btn btn-primary my-4">Sign in</button>
             </div>
           </form>
         </div>
@@ -71,7 +72,7 @@
           <a href="javascript:void(0)" class="text-light"><small>Forgot password?</small></a>
         </div>
         <div class="col-6 text-right">
-          <a href="javascript:void(0)" class="text-light"><small>Create new account</small></a>
+          <a routerLink="/register" class="text-light"><small>Create new account</small></a>
         </div>
       </div>
     </div>
