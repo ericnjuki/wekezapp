@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 
 @Injectable()
 export class AuthService {
-  private _url = 'http://localhost:51191/api/v1.0/users/';
+  private _url = 'https://localhost:44380/api/users/';
 
   constructor(private http: Http) { }
   register(credentials: {}) {
@@ -14,14 +14,16 @@ export class AuthService {
   }
 
   login(credentials: {}) {
-    console.log(credentials);
     return this.http
       .post(this._url + 'login', credentials)
       .pipe(map(response => {
         const result = response.json();
         console.log(result);
 
-        if (result && result.Token) {
+        if (result && result.token) {
+          localStorage.setItem('token', result.token);
+          return true;
+        } else if (result && result.Token) {
           localStorage.setItem('token', result.Token);
           return true;
         }

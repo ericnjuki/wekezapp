@@ -12,7 +12,7 @@
     <!-- User -->
     <ul class="nav align-items-center d-md-none">
       <li class="nav-item" ngbDropdown placement="bottom-right">
-        <a class="nav-link nav-link-icon" role="button" ngbDropdownToggle>
+        <a class="nav-link nav-link-icon" role="button" ngbDropdownToggle hidden>
           <i class="ni ni-bell-55"></i>
         </a>
         <div class="dropdown-menu-arrow dropdown-menu-right" ngbDropdownMenu>
@@ -23,7 +23,8 @@
         </div>
       </li>
       <li class="nav-item" ngbDropdown placement="bottom-right">
-        <a class="nav-link" role="button" ngbDropdownToggle>
+        <a class="nav-link" role="button" routerLink="/user-profile">
+          <!-- <a class="nav-link" role="button" ngbDropdownToggle> -->
           <div class="media align-items-center">
             <span class="avatar avatar-sm rounded-circle">
               <img alt="Image placeholder" src="./assets/img/theme/team-1-800x800.jpg">
@@ -95,7 +96,7 @@
                   {{menuItem.title}}
               </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" style="cursor: pointer;">
             <a class="nav-link" (click)="logout()">
                 <i class="ni ni-bold-left text-red"></i>
                 Logout

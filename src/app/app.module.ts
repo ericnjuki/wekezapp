@@ -15,6 +15,7 @@ import { ComponentsModule } from './components/components.module';
 import { AuthGuard } from './services/auth-guard.service';
 import { AuthService } from './services/auth.service';
 import { HttpModule } from '@angular/http';
+import { AdminSetupComponent } from './wekezapp/admin-setup/admin-setup.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { HttpModule } from '@angular/http';
   declarations: [
     AppComponent,
     AdminLayoutComponent,
-    AuthLayoutComponent
+    AuthLayoutComponent,
+    AdminSetupComponent
   ],
   providers: [AuthGuard, AuthService],
   bootstrap: [AppComponent]
