@@ -13,6 +13,9 @@ import { MapsComponent } from '../../pages/maps/maps.component';
 import { UserProfileComponent } from '../../pages/user-profile/user-profile.component';
 import { TablesComponent } from '../../pages/tables/tables.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MerryGoRoundComponent } from 'src/app/wekezapp/merry-go-round/merry-go-round.component';
+import { PersonalAccountComponent } from 'src/app/wekezapp/personal-account/personal-account.component';
+import { LoansComponent } from 'src/app/wekezapp/loans/loans.component';
 // import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
@@ -29,7 +32,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     UserProfileComponent,
     TablesComponent,
     IconsComponent,
-    MapsComponent
+    MapsComponent,
+    MerryGoRoundComponent,
+    PersonalAccountComponent,
+    LoansComponent
   ]
 })
 

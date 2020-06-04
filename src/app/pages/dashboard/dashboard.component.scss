@@ -1,0 +1,17 @@
+.wp-notification-item {
+  padding: 0.7em 2em;
+  background-color: #e8eaed;
+}
+.wp-notification-item ~ .wp-notification-item {
+  border-top: 1px solid #ced4da;
+}
+.wp-notification-text {
+  font-weight: 400;
+  color: #32325d;
+  // line-height: 2em;
+}
+.wp-notification-time {
+  margin-top: 1rem;
+  margin-bottom: 0rem;
+  color: #7f838c;
+}

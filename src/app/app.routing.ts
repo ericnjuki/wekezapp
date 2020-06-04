@@ -6,11 +6,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { AuthGuard } from './services/auth-guard.service';
+import { SetupLayoutComponent } from './layouts/setup-layout/setup-layout.component';
 
 const routes: Routes = [
   {
     path: '',
-    canActivate: [AuthGuard],
+    // canActivate: [AuthGuard],
     redirectTo: 'dashboard',
     pathMatch: 'full'
   },
@@ -34,6 +35,17 @@ const routes: Routes = [
         path: '',
         loadChildren:
           './layouts/auth-layout/auth-layout.module#AuthLayoutModule'
+      }
+    ]
+  },
+  {
+    path: '',
+    component: SetupLayoutComponent,
+    children: [
+      {
+        path: '',
+        loadChildren:
+          './layouts/setup-layout/setup-layout.module#SetupLayoutModule'
       }
     ]
   },

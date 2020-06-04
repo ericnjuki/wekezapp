@@ -1,3 +1,221 @@
-<p>
-  admin-setup works!
-</p>
+<nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
+  <div class="container-fluid">
+    <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"></a>
+
+    <ul class="navbar-nav align-items-center d-none d-md-flex">
+      <li class="nav-item" ngbDropdown placement="bottom-right">
+        <a class="nav-link pr-0" role="button" routerLink="/user-profile">
+          <div class="media align-items-center">
+            <span class="avatar avatar-sm rounded-circle">
+              <img alt="Image placeholder" src="assets/img/theme/team-4-800x800.jpg">
+            </span>
+            <div class="media-body ml-2 d-none d-lg-block">
+              <span class="mb-0 text-sm  font-weight-bold">{{ authService.currentUser.Email }}</span>
+            </div>
+          </div>
+        </a>
+        <div class="" ngbDropdownMenu>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item text-white" (click)="logout()">
+            <i class="ni ni-user-run"></i>
+            <span>Logout</span>
+          </a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+
+
+
+
+<div class="header bg-gradient-danger py-7 py-lg-8">
+  <div class="container">
+    <div class="header-body text-center mb-7">
+      <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-6">
+          <h1 class="text-white" *ngIf="setupStepNumber==1">Tell us about your Chama</h1>
+          <h1 class="text-white" *ngIf="setupStepNumber==2">Let's add some members to</h1>
+          <h1 class="text-white" *ngIf="setupStepNumber==2">{{ chamaName }}</h1>
+          <h1 class="text-white" *ngIf="setupStepNumber==3">Time to update your records</h1>
+          <h1 class="text-white" *ngIf="setupStepNumber==4">Merry Go Round!</h1>
+          <!-- <p class="text-lead text-light">Please fill in the form below to create your new account for free!</p> -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="separator separator-bottom separator-skew zindex-100">
+    <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
+    </svg>
+  </div>
+</div>
+<!-- Page content -->
+<div class="container mt--8 pb-5">
+  <!-- Table -->
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+      <div class="card bg-secondary shadow border-0">
+        <!-- <div class="card-header bg-transparent pb-5">
+          <div class="text-muted text-center mt-2 mb-4"><small>Sign up with</small></div>
+          <div class="text-center">
+            <a href="javascript:void(0)" class="btn btn-neutral btn-icon mr-4">
+              <span class="btn-inner--icon"><img src="assets/img/icons/common/github.svg"></span>
+              <span class="btn-inner--text">Github</span>
+            </a>
+            <a href="javascript:void(0)" class="btn btn-neutral btn-icon">
+              <span class="btn-inner--icon"><img src="assets/img/icons/common/google.svg"></span>
+              <span class="btn-inner--text">Google</span>
+            </a>
+          </div>
+        </div> -->
+        <div class="card-body px-lg-5 py-lg-5">
+          <!-- <div class="text-center text-muted mb-4">
+            <small>Or sign up with credentials</small>
+          </div> -->
+          <form role="form" #registerForm="ngForm" *ngIf="setupStepNumber==1">
+            <div class="form-group">
+              <label for="chama-name">What is your Chama called?</label>
+              <div class="input-group input-group-alternative mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                </div>
+                <input class="form-control" placeholder="Chama Name" type="text" [(ngModel)]="chamaName" name="chama-name">
+              </div>
+            </div>
+            <div class="text-center">
+              <button type="button" (click)="proceed()" class="btn btn-primary mt-4">Proceed</button>
+            </div>
+          </form>
+
+          <form role="form" #registerForm="ngForm" *ngIf="setupStepNumber==2">
+            <div class="form-group">
+              <label for="chama-name">Add Members</label>
+              <div>
+                <small>fill in the fields below and click the add button to add members to the list</small>
+              </div>
+
+              <input class="form-control" type="text" placeholder="Name" [(ngModel)]="name" name="Name">
+              <input class="form-control" type="text" placeholder="Email" [(ngModel)]="email" name="Email">
+              <input class="form-control" type="number" placeholder="Amount Saved" [(ngModel)]="personalAmt" name="PersonalAmount">
+
+              <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" (click)="toggleDropdown('dropdown-content-role')">{{ roleText }}</button>
+                <div class="dropdown-content dropdown-content-role">
+                  <p (click)="setMemberRole('Member')">Member</p>
+                  <p (click)="setMemberRole('Treasurer')">Treasurer</p>
+                  <p (click)="setMemberRole('Secretary')">Secretary</p>
+                </div>
+              </div>
+              <br>
+              <button class="btn btn-success" (click)="addMember()">Add Member</button>
+              <!-- <table class="table w-adder">
+                <tr>
+                  <td contenteditable="true" data-text="Name" (input)="onTdChange(firstNameTd, 'firstName')" [innerHTML]="dummyField" #firstNameTd></td>
+                  <td contenteditable="true" data-text="Email" (input)="onTdChange(emailTd, 'email')" [innerHTML]="dummyField" #emailTd></td>
+                  <td contenteditable="true" data-text="Role e.g. Member, Treasurer.." (input)="onTdChange(roleTd, 'role')" [innerHTML]="dummyField" #roleTd></td>
+                  <td>
+                    <a class="pull-right add-remove-btn" (click)="addMember()">
+                      <i class="icon ion-android-add-circle"></i>
+                    </a>
+                  </td>
+                </tr>
+              </table> -->
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Role</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let member of members; let memberIndex=index">
+                    <td>{{ member.firstName }}</td>
+                    <td>{{ member.email }}</td>
+                    <td>{{ member.role || 'Member'}}</td>
+                    <td>
+                      <a class="pull-right add-remove-btn" (click)="removeMember(memberIndex)">
+                        <i class="icon ion-android-remove-circle"></i>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="text-center">
+              <button type="button" (click)="proceed()" class="btn btn-primary mt-4">Proceed</button>
+            </div>
+          </form>
+
+          <form role="form" #registerForm="ngForm" *ngIf="setupStepNumber==3">
+            <div class="form-group">
+              <p>How often do you do contributions?</p>
+              
+              <div class="form-control" style="height: calc(4.5rem + 2px);">
+                <div class="radio">
+                  <label><input type="radio" name="Period" value="1"> Weekly</label>
+                </div>
+                <div class="radio">
+                  <label><input  type="radio" name="Period" value="2" checked> Monthly</label>
+                </div>
+              </div>
+            </div>
+
+            <p>How much does each member contribute (minimum)?</p>
+            <label for="minCont">Ksh
+              <input type="number" name="minCont" id="minCont" [(ngModel)]="minContribution">
+            </label>
+
+            <p>What's the fine for late payment (per period set above)?</p>
+            <label for="contFine">Ksh
+              <input type="number" name="contFine" id="contFine" [(ngModel)]="contFine">
+            </label>
+
+            <div class="text-center">
+              <button type="button" (click)="proceed()" class="btn btn-primary mt-4">Proceed</button>
+            </div>
+          </form>
+
+          <form role="form" #registerForm="ngForm" *ngIf="setupStepNumber==4">
+            <div class="form-group">
+              <p>Select the order of receiving monthly pay outs</p>
+              
+              <button (click)="loadUsers()">users</button>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">No. in queue</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Next pay out</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let member of members; let memberIndex=index">
+                    <td>{{ memberIndex + 1 }}</td>
+                    <td>
+                      <div class="dropdown">
+                        <button class="dropdown-toggle" (click)="toggleDropdown('dropdown-content-name', memberIndex)">{{ member.firstName }}</button>
+                        <div class="dropdown-content dropdown-content-name">
+                          <p *ngFor="let chamaMember of members; let listIndex=index" (click)="reorderNames(listIndex, memberIndex)">{{ chamaMember.firstName }}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>{{ getMGRDate(memberIndex) }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <div class="text-center">
+              <button type="button" (click)="proceed()" class="btn btn-primary mt-4">Proceed</button>
+            </div>
+          </form>
+        </div>
+        <!-- <a class="dropdown-item" (click)="skipSetup()">Skip >></a> -->
+      </div>
+    </div>
+  </div>
+</div>
