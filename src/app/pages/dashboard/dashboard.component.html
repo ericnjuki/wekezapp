@@ -106,7 +106,11 @@
           </div>
         </div>
         <div class="card">
-          <div class="col wp-notification-item col-xl-12">
+          <div *ngFor="let flowItem of flowItems | async" class="col wp-notification-item col-xl-12">
+            <span class="wp-notification-text">{{ flowItem.body }}</span>
+            <h6 class="text-uppercase ls-1 wp-notification-time" style="color: #525f7f;">{{ flowItem.dateCreated }}</h6>
+          </div>
+          <!-- <div class="col wp-notification-item col-xl-12">
             <span class="wp-notification-text">Fred Makoha added you and 6 other members to The OG</span>
             <h6 class="text-uppercase ls-1 wp-notification-time" style="color: #525f7f;">5 days ago</h6>
           </div>
@@ -121,7 +125,7 @@
           <div class="wp-notification-item col-xl-12">
             <span class="wp-notification-text">Admin created the chama The OG</span>
             <h6 class="text-uppercase ls-1 wp-notification-time" style="color: #525f7f;">5 days ago</h6>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

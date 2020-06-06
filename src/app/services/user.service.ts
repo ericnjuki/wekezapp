@@ -1,18 +1,21 @@
 import { Injectable } from '@angular/core';
 import { JwtHelper, tokenNotExpired } from 'angular2-jwt';
-import { Http } from '@angular/http';
+import { Http, RequestOptions, URLSearchParams } from '@angular/http';
 import { map } from 'rxjs/operators';
 import { Chama } from '../shared/chama.model';
 import { User } from '../shared/user.model';
 import { Observable } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class UserService {
   private _url = 'https://localhost:44380/api/users/';
+  private options: RequestOptions = new RequestOptions();
 
-  constructor(private http: Http) { }
+  constructor(private http: Http, private authService: AuthService) { }
 
   getAllUsers() {
+    return this.http.get(this._url).pipe(map(response => response.json()));
     return new Observable(subscriber => {
       subscriber.next(
         [
@@ -81,5 +84,11 @@ export class UserService {
     // });
     return this.http
       .post(this._url + 'addBulk', users);
+  }
+
+  getFlow() {
+    this.options.params = new URLSearchParams('userId=' + this.authService.currentUser.UserId);
+    return this.http.get(this._url + 'getFlow', this.options)
+    .pipe(map(response => response.json()));
   }
 }

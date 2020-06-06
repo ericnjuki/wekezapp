@@ -8,6 +8,7 @@ import {
   chartExample1,
   chartExample2
 } from '../../variables/charts';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,9 +23,16 @@ export class DashboardComponent implements OnInit {
   public clicked = true;
   public clicked1 = false;
 
-  constructor() { }
+  private flowItems;
+
+  constructor(private userService: UserService) { }
 
   ngOnInit() {
+    this.flowItems = this.userService.getFlow();
+    // this.userService.getFlow()
+    // .subscribe(res => {
+    //   console.log(res);
+    // });
 
     this.datasets = [
       [0, 20, 10, 30, 15, 40, 20, 60, 60],
