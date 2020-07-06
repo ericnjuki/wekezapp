@@ -1,0 +1,23 @@
+export enum NotificationType {
+  PersonalDepositAsDepositor = 1,
+  PersonalDepositAsAdmin,
+  PersonalWithdrawalAsWithdrawer,
+  PersonalWithdrawalAsAdmin,
+  DepositToChamaAsAdmin,
+  DepositToChamaAsAll,
+  WithdrawFromChamaAsAdmin,
+  WithdrawFromChamaAsAll,
+  LoanRequestAsRequester,
+  LoanRequestAsAdmin,
+  LoanDisbursmentAsRequester,
+  LoanDisbursmentAsAll,
+  LoanRepayment,
+  LoanFineApplication,
+  ContributionPayment,
+  ContributionReminder,
+  MerryGoRoundDisbursementAsReceipient,
+  MerryGoRoundDisbursementAsAll,
+  PayoutAsReceiver,
+  PayoutAsAdmin,
+  Announcement
+}

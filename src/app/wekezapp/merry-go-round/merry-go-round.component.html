@@ -114,8 +114,8 @@
               <tr *ngFor="let member of members; let memberIndex=index;">
                 <th scope="row">{{ memberIndex + 1 }}</th>
                 <td>{{ member.firstName }}</td>
-                <td>{{ member.nextMGR.toLocaleDateString() }}</td>
-                <td>Ksh. 600</td>
+                <td>{{ getMgrDate(memberIndex, true) }}</td>
+                <td>Ksh. {{ chama.mgrAmount }}</td>
               </tr>
               <!-- <tr>
                 <th scope="row">
@@ -434,6 +434,89 @@
               </li>
             </ul>
           </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-5">
+    <div class="col-xl-4">
+      <div class="card wp-card shadow mb-4">
+        <div class="card-header bg-transparent">
+          <div class="row align-items-center">
+            <div class="col">
+              <h6 class="text-uppercase ls-1 mb-1">admin</h6>
+              <h3 *ngIf="chama.period==1" class="mb-0">Disburse Weekly Payout</h3>
+              <h3 *ngIf="chama.period!=1" class="mb-0">Disburse Weekly Payout</h3>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label class="form-control-label" for="input-mgr-receipient">Receipient</label>
+                <input type="text" disabled [(ngModel)]="members[0].firstName" name="input-mgr-receipient" id="input-mgr-receipient" class="form-control form-control-alternative" placeholder="Amount">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label for="input-mgr-amount" class="text-default">Amount</label>
+                <input type="number" disabled [(ngModel)]="chama.mgrAmount" name="input-mgr-amount" id="input-mgr-amount" class="form-control form-control-alternative">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <input *ngIf="mgrDisabled()" type="button" [disabled]="mgrDisabled()" (click)="disburseMgr()" class="btn btn-success form-control form-control-alternative" value="Disburse" data-toggle="tooltip" data-placement="bottom" [(title)]="disabledMgrMessage">
+                <input *ngIf="!mgrDisabled()" type="button" (click)="disburseMgr()" class="btn btn-success form-control form-control-alternative" value="Disburse">
+                <!-- <input type="button" (click)="disburseMgr()" class="btn btn-danger form-control form-control-alternative" value="Disburse"> -->
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <div class="form-group">
+                <p *ngIf="disbursementSuccess" class="text-success">Transaction Successfull!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-8">
+      <div class="card-header bg-light border-0">
+        <h6 class="text-uppercase ls-1 mb-1">admin</h6>
+        <h3 class="text-default mb-0">Change Queue Order</h3>
+      </div>
+      <div class="table-responsive bg-light">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">No. in queue</th>
+              <th scope="col">Name</th>
+              <th scope="col">Next pay out</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let member of membersOrderList; let memberIndex=index">
+              <td>{{ memberIndex + 1 }}</td>
+              <td>
+                <div class="dropdown">
+                  <button class="dropdown-toggle" (click)="toggleDropdown('dropdown-content-mgr-name', memberIndex)">{{ member.firstName }}</button>
+                  <div class="dropdown-content dropdown-content-mgr-name">
+                    <p *ngFor="let chamaMember of membersOrderList; let listIndex=index" (click)="reorderNames(listIndex, memberIndex)">{{ chamaMember.firstName }}</p>
+                  </div>
+                </div>
+              </td>
+              <td>{{ getMgrDate(memberIndex, true) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer bg-light border-0">
+        <div class="row">
+          <div class="col col-xl-1" style="margin-left: 77%;">
+            <button (click)="saveMgrOrder()" class="btn btn-success">Save</button>
+          </div>
         </div>
       </div>
     </div>

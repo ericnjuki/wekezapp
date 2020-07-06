@@ -43,7 +43,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                 </div>
-                <input class="form-control" [(ngModel)]="username" name="username" placeholder="username" type="text" required autofocus>
+                <input class="form-control" [(ngModel)]="email" name="email" placeholder="email" type="text" required autofocus>
               </div>
             </div>
             <div class="form-group">
@@ -54,7 +54,7 @@
                 <input class="form-control" [(ngModel)]="password" name="password" placeholder="password" type="password" required>
               </div>
             </div>
-            <div *ngIf="invalidLogin" style="color: red;">Invalid username and/or password</div>
+            <div *ngIf="invalidLogin" style="color: red;">Invalid email and/or password</div>
             <div class="custom-control custom-control-alternative custom-checkbox">
               <input class="custom-control-input" id=" customCheckLogin" type="checkbox">
               <label class="custom-control-label" for=" customCheckLogin">

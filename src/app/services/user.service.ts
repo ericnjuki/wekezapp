@@ -6,72 +6,59 @@ import { Chama } from '../shared/chama.model';
 import { User } from '../shared/user.model';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
+import { NotificationType } from '../shared/flow-type.enum';
 
 @Injectable()
 export class UserService {
   private _url = 'https://localhost:44380/api/users/';
   private options: RequestOptions = new RequestOptions();
 
-  constructor(private http: Http, private authService: AuthService) { }
+  constructor(private http: Http, private authService: AuthService) {}
 
   getAllUsers() {
-    return this.http.get(this._url).pipe(map(response => response.json()));
-    return new Observable(subscriber => {
-      subscriber.next(
-        [
-          {
-            userId: '1',
-            firstName: 'Fred Makoha',
-            secondName: '',
-            email: 'a@b.c',
-            role: 'Chairperson',
-            token: 'token',
-            balance: '1500',
-            nextMGR: new Date()
-          },
-          {
-            userId: '2',
-            firstName: 'Francine Makoha',
-            secondName: '',
-            email: 'francine@b.c',
-            role: 'Member',
-            token: 'token',
-            balance: '1000',
-            nextMGR: new Date()
-          },
-          {
-            userId: '3',
-            firstName: 'Beatrice Nyaga',
-            secondName: '',
-            email: 'beatrice@b.c',
-            role: 'Member',
-            token: 'token',
-            balance: '750',
-            nextMGR: new Date()
-          }
-        ]
-      );
+    return this.http.get(this._url).pipe(map((response) => response.json()));
+    return new Observable((subscriber) => {
+      subscriber.next([
+        {
+          userId: '1',
+          firstName: 'Fred Makoha',
+          secondName: '',
+          email: 'a@b.c',
+          role: 'Chairperson',
+          token: 'token',
+          balance: '1500',
+          nextMGR: new Date(),
+        },
+        {
+          userId: '2',
+          firstName: 'Francine Makoha',
+          secondName: '',
+          email: 'francine@b.c',
+          role: 'Member',
+          token: 'token',
+          balance: '1000',
+          nextMGR: new Date(),
+        },
+        {
+          userId: '3',
+          firstName: 'Beatrice Nyaga',
+          secondName: '',
+          email: 'beatrice@b.c',
+          role: 'Member',
+          token: 'token',
+          balance: '750',
+          nextMGR: new Date(),
+        },
+      ]);
       subscriber.complete();
     });
   }
 
-  findByUsername(username) {
+  findById(userId) {
     console.log('fetching user...');
-    return new Observable(subscriber => {
-      subscriber.next({
-        userId: '1',
-        firstName: 'Fred Makoha',
-        secondName: '',
-        email: 'a@b.c',
-        role: 'Chairperson',
-        token: 'token',
-        balance: '0'
-      });
-      subscriber.complete();
-    });
     return this.http
-      .get(this._url + 'u/' + username)
-        .pipe(map(response => response.json()));
+      .get(this._url + userId)
+      .pipe(map((response) => response.json()));
   }
 
   addUsers(users: User[]) {
@@ -82,13 +69,44 @@ export class UserService {
     //   subscriber.next(true);
     //   subscriber.complete();
     // });
-    return this.http
-      .post(this._url + 'addBulk', users);
+    this.options.params = new URLSearchParams(
+      'addedBy=' + this.authService.currentUser.UserId
+    );
+    // console.log('addedBy: ' + this.authService.currentUser.UserId);
+    return this.http.post(this._url + 'addBulk', users, this.options);
+  }
+
+  updateUser(user: User) {
+    console.log('updating user...');
+    console.log(user);
+    return this.http.put(this._url, user);
   }
 
   getFlow() {
-    this.options.params = new URLSearchParams('userId=' + this.authService.currentUser.UserId);
-    return this.http.get(this._url + 'getFlow', this.options)
-    .pipe(map(response => response.json()));
+    this.options.params = new URLSearchParams(
+      'userId=' + this.authService.currentUser.UserId
+    );
+    return this.http
+      .get(this._url + 'getFlow', this.options)
+      .pipe(map((response) => response.json()));
+
+    // returns:
+    // body: "Fred Makoha added 1 new members to the chama"
+    // dateCreated: "2020-06-16T12:03:50.7985722"
+    // dateModified: "0001-01-01T00:00:00"
+    // flowItemId: 7
+    // hasBeenSeenBy: null
+    // isConfirmable: false
+    // isConfirmed: false
+  }
+
+  getFlowOfType(notificationType: NotificationType) {
+    this.options.params = new URLSearchParams(
+      'userId=' + this.authService.currentUser.UserId +
+      '&notificationType=' + notificationType
+    );
+    return this.http
+      .get(this._url + 'getFlowOfType', this.options)
+      .pipe(map((response) => response.json()));
   }
 }

@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit, OnDestroy {
   invalidLogin: boolean;
-  username;
+  email;
   password;
 
   constructor(
@@ -23,8 +23,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   login() {
-    // console.log(this.username + ' ' + this.password);
-    this.authService.login({username: this.username, password: this.password}).subscribe(result => {
+    // console.log(this.email + ' ' + this.password);
+    this.authService.login({email: this.email, password: this.password}).subscribe(result => {
       if (result) {
         const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
         this.router.navigate([returnUrl || '/']);

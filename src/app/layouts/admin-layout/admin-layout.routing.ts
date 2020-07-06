@@ -8,6 +8,7 @@ import { TablesComponent } from '../../pages/tables/tables.component';
 import { MerryGoRoundComponent } from 'src/app/wekezapp/merry-go-round/merry-go-round.component';
 import { PersonalAccountComponent } from 'src/app/wekezapp/personal-account/personal-account.component';
 import { LoansComponent } from 'src/app/wekezapp/loans/loans.component';
+import { AdminPanelComponent } from 'src/app/wekezapp/admin-panel/admin-panel.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
@@ -17,5 +18,6 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'maps',           component: MapsComponent },
     { path: 'mgr',            component: MerryGoRoundComponent},
     { path: 'personal',       component: PersonalAccountComponent},
-    { path: 'loans',          component: LoansComponent}
+    { path: 'loans',          component: LoansComponent},
+    { path: 'admin',          component: AdminPanelComponent}
 ];

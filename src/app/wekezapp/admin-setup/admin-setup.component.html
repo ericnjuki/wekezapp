@@ -156,10 +156,10 @@
               
               <div class="form-control" style="height: calc(4.5rem + 2px);">
                 <div class="radio">
-                  <label><input type="radio" name="Period" value="1"> Weekly</label>
+                  <label><input type="radio" name="Period" value="1" checked> Weekly</label>
                 </div>
                 <div class="radio">
-                  <label><input  type="radio" name="Period" value="2" checked> Monthly</label>
+                  <label><input  type="radio" name="Period" value="2"> Monthly</label>
                 </div>
               </div>
             </div>
@@ -169,9 +169,14 @@
               <input type="number" name="minCont" id="minCont" [(ngModel)]="minContribution">
             </label>
 
-            <p>What's the fine for late payment (per period set above)?</p>
+            <p>What's the fine amount for late payment (per period set above)?</p>
             <label for="contFine">Ksh
               <input type="number" name="contFine" id="contFine" [(ngModel)]="contFine">
+            </label>
+
+            <p>What's the minimum rate for issued loans?</p>
+            <label for="loanRate">
+              <input type="number" name="loanRate" id="loanRate" [(ngModel)]="loanRate"> %
             </label>
 
             <div class="text-center">
@@ -181,9 +186,12 @@
 
           <form role="form" #registerForm="ngForm" *ngIf="setupStepNumber==4">
             <div class="form-group">
-              <p>Select the order of receiving monthly pay outs</p>
-              
-              <button (click)="loadUsers()">users</button>
+              <p>Set amount for regular pay outs</p>
+              <label for="mgrAmount">Ksh
+                <input type="number" name="mgrAmount" id="mgrAmount" [(ngModel)]="mgrAmount">
+              </label>
+
+              <p>Select the order of receiving regular pay outs</p>
               <table class="table">
                 <thead>
                   <tr>
@@ -203,7 +211,7 @@
                         </div>
                       </div>
                     </td>
-                    <td>{{ getMGRDate(memberIndex) }}</td>
+                    <td>{{ getMGRDate(memberIndex, true) }}</td>
                   </tr>
                 </tbody>
               </table>

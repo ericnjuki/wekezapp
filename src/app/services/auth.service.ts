@@ -37,6 +37,7 @@ export class AuthService {
 
   login(credentials: {}) {
     console.log('logging in user...');
+    console.log(credentials);
     return this.http
       .post(this._url + 'login', credentials)
       .pipe(map(response => {
@@ -54,9 +55,9 @@ export class AuthService {
       }));
   }
 
-  logout() {
+  logout(returnUrl?: string) {
     localStorage.removeItem('token');
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login'], { queryParams: { returnUrl: returnUrl}});
   }
 
   isLoggedIn() {
@@ -68,12 +69,19 @@ export class AuthService {
     return false;
   }
 
+  get currentUserIsAdmin() {
+    if (this.currentUser.Role === 'Admin' || this.currentUser.Role === 'Treasurer') {
+      return true;
+    }
+    return false;
+  }
+
   get currentUser() {
     const jwtHelper = new JwtHelper();
     const token = localStorage.getItem('token');
 
     if (!token) {
-      return false;
+      return null;
     }
 
     return jwtHelper.decodeToken(token);

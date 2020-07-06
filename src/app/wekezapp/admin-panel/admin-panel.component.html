@@ -1,0 +1,210 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+  <div class="container-fluid">
+    <div class="header-body">
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid mt--7">
+  <div class="row">
+    <div class="col-xl-6 mb-5">
+      <div class="card bg-default shadow wp-card">
+        <div class="card-header bg-transparent">
+          <div class="row align-items-center">
+            <div class="col">
+              <h6 class="text-uppercase text-light ls-1 mb-1">admin</h6>
+              <h2 class="mb-0 text-white">Add New Member</h2>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label class="form-control-label text-light" for="input-new-member-first-name">Name</label>
+                <input type="text" [(ngModel)]="member.firstName" name="input-new-member-first-name" id="input-new-member-first-name" class="form-control form-control-alternative" placeholder="Full Name">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label class="form-control-label text-light" for="input-first-name">Role</label>
+                <div class="ddown">
+                  <button class="ddown-toggle btn form-control" (click)="toggleDropdown('ddown-content-new-account-role')">{{ roleText }}</button>
+                  <div class="ddown-content ddown-content-new-account-role" style="width: 100%;">
+                    <p (click)="selectNewMemberRole('Member')">Member</p>
+                    <p (click)="selectNewMemberRole('Secretary')">Secretary</p>
+                    <p (click)="selectNewMemberRole('Treasurer')">Treasurer</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="form-control-label text-light" for="input-new-member-email">Email</label>
+                <input type="email" [(ngModel)]="member.email" name="input-new-member-email" id="input-new-member-email" class="form-control form-control-alternative" placeholder="Email">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label class="form-control-label text-light" for="input-new-member-amount">Amount In Account</label>
+                <input type="number" [(ngModel)]="member.balance" name="input-new-member-amount" id="input-new-member-amount" class="form-control form-control-alternative" placeholder="Amount">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label class="form-control-label text-default" for="btn-add-new-member">.</label>
+                <input type="button" (click)="addNewMember()" id="btn-add-new-member" class="btn btn-primary form-control form-control-alternative" value="Add New Member">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-6 mb-xl-0">
+      <div class="card shadow wp-card">
+        <div class="card-header bg-transparent">
+          <div class="row align-items-center">
+            <div class="col">
+              <h6 class="text-uppercase ls-1 mb-1">admin</h6>
+              <h2 class="mb-0">Edit Member Account Balance</h2>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="form-control-label" for="input-first-name">Member</label>
+                <div class="ddown">
+                  <button class="ddown-toggle btn form-control" (click)="toggleDropdown('ddown-content-name-account-edit')">{{ selectedAccountEditee }}</button>
+                  <div class="ddown-content ddown-content-name-account-edit" style="width: 100%;">
+                    <p *ngFor="let accountEditee of membersNamesList" (click)="selectUserWhoseAccountToEdit(accountEditee.name)">{{ accountEditee.name }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label class="form-control-label" for="input-new-account-amount">Account Amount</label>
+                <input [(ngModel)]="accountEditeeAmount" type="number" id="input-new-account-amount" class="form-control form-control-alternative" placeholder="Amount">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label class="form-control-label text-white" for="save-changes-account">.</label>
+                <input type="button" (click)="updateMemberAccountAmount()" id="save-changes-account" class="btn btn-success form-control form-control-alternative" value="Save Changes">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-5">
+    <div class="col-xl-6 mb-xl-0">
+      <div class="card shadow wp-card">
+        <div class="card-header bg-transparent">
+          <div class="row align-items-center">
+            <div class="col">
+              <h6 class="text-uppercase ls-1 mb-1">admin</h6>
+              <h2 class="mb-0">Transfer Chama Funds to Member</h2>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="form-control-label" for="input-first-name">Member</label>
+                <div class="ddown">
+                  <button class="ddown-toggle btn form-control" (click)="toggleDropdown('ddown-content-name-payout')">{{ selectedPayoutee }}</button>
+                  <div class="ddown-content ddown-content-name-payout" style="width: 100%;">
+                    <p *ngFor="let payoutee of membersNamesList" (click)="selectPayoutReceipient(payoutee)">{{ payoutee }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label class="form-control-label text-white" for="input-transfer-amount">Enter amount</label>
+                <input type="number" name="input-transfer-amount" id="input-transfer-amount" class="form-control form-control-alternative" placeholder="Amount" [(ngModel)]="depositAmt">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label for="" class="text-default">.</label>
+                <input (click)="requestPersonalDeposit()" type="button" id="input-last-name" class="btn btn-success form-control form-control-alternative" value="Transfer">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-5">
+    <div class="col-xl-6 mb-5 mb-xl-0">
+      <div class="card bg-light shadow">
+        <div class="card-header bg-transparent">
+          <div class="row align-items-center">
+            <div class="col">
+              <h6 class="text-uppercase ls-1 mb-1">admin</h6>
+              <h2 class="mb-0">Deposit to Chama</h2>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label class="form-control-label" for="input-chama-deposit-amount">Enter amount</label>
+                <input type="number" name="input-chama-deposit-amount" id="input-chama-deposit-amount" class="form-control form-control-alternative" placeholder="Amount" [(ngModel)]="depositAmt">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label for="" class="text-light">.</label>
+                <input (click)="requestPersonalDeposit()" type="button" id="input-last-name" class="btn btn-success form-control form-control-alternative" value="Deposit">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-6 mb-5 mb-xl-0">
+      <div class="card bg-light shadow">
+        <div class="card-header bg-transparent">
+          <div class="row align-items-center">
+            <div class="col">
+              <h6 class="text-uppercase ls-1 mb-1">admin</h6>
+              <h2 class="mb-0">Withdraw From Chama</h2>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label class="form-control-label" for="input-chama-withdrawal-amount">Enter amount</label>
+                <input type="number" name="input-chama-withdrawal-amount" id="input-chama-withdrawal-amount" class="form-control form-control-alternative" placeholder="Amount" value="1000">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label for="" class="text-white">.</label>
+                <input type="button" id="input-last-name" class="btn btn-success form-control form-control-alternative" value="Withdraw">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>

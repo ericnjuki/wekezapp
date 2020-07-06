@@ -1,26 +1,132 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/shared/user.model';
+import { ChamaService } from 'src/app/services/chama.service';
+import { Chama } from 'src/app/shared/chama.model';
+import { LedgerService } from 'src/app/services/ledger.service';
 
 @Component({
   selector: 'app-merry-go-round',
-  templateUrl: 'merry-go-round.component.html'
+  templateUrl: 'merry-go-round.component.html',
+  styleUrls: ['./merry-go-round.component.css']
 })
 
 export class MerryGoRoundComponent implements OnInit {
   members = [];
+  membersOrderList = [];
+  chama = new Chama();
+  dropdownToggle = true;
+  disabledMgrMessage = '';
+  disbursementSuccess = false;
 
   constructor(
-    // private chamaService: ChamaService,
+    private chamaService: ChamaService,
     private userService: UserService,
+    private ledgerService: LedgerService
     // private route: ActivatedRoute,
     // private router: Router
   ) {}
 
   ngOnInit() {
+    this.chamaService.getChama()
+    .subscribe(chama => {
+      this.chama = chama;
+      this.disabledMgrMessage = 'Disabled until ' + new Date(this.chama.nextMgrDate).toLocaleDateString();
+    });
+
     this.userService.getAllUsers()
       .subscribe( res => {
-      this.members = <User[]>res;
+        const firstIndex = this.chama.nextMgrReceiverIndex;
+        const index = [];
+
+        for (let i = firstIndex; i < res.length; i++) {
+          index.push(i);
+        }
+        for (let i = 0; i < firstIndex; i++) {
+          index.push(i);
+        }
+        this.members = this.membersOrderList = index.map(i => <User>res[i]);
     });
+
+
+  }
+
+  getMgrDate(memberIndex, returnAsString = false) {
+    let d = new Date(this.chama.nextMgrDate);
+    // I'm not giving the user a choice of which DAY the payout happens (it's sunday)
+    if (this.chama.period === 1) { // weekly
+        // return dates as a function of index starting today
+
+        // set date to the next sunday
+        d.setDate(d.getDate() + (7 - d.getDay()) % 7);
+
+        // return sunday based on your position in queue
+        d.setDate(d.getDate() + memberIndex * 7);
+        // set date to next sunday and return dates as a function of index starting then
+    } else { // pay on the 1st of each month, always
+        // set date to first day of next month
+        d = new Date(d.getFullYear(), d.getMonth() + memberIndex + 1, 1);
+    }
+    return returnAsString ? d.toLocaleDateString() : d;
+  }
+
+  reorderNames(fromIndex, toIndex) {
+    console.log('from: ' + fromIndex + ' to: ' + toIndex);
+
+    // do a swap (since angular will swap them in the ui using this array anyway)
+    [this.membersOrderList[toIndex], this.membersOrderList[fromIndex]] = [this.membersOrderList[fromIndex], this.membersOrderList[toIndex]];
+
+    this.toggleDropdown('dropdown-content-mgr-name', toIndex);
+  }
+
+  saveMgrOrder() {
+    this.chama.mgrOrder = [];
+    for (let i = 0; i < this.membersOrderList.length; i++) {
+      this.chama.mgrOrder.push(this.members[i].userId);
+    }
+    this.chamaService.updateChama(this.chama)
+    .subscribe(res => {
+      console.log('MGR order updated!');
+  });
+  }
+
+  disburseMgr() {
+    this.ledgerService.createMgr()
+      .subscribe(mgr => {
+        this.ledgerService.disburseMgr(mgr.transactionId)
+          .subscribe(updatedMgr => {
+            this.disbursementSuccess = true;
+          });
+      });
+  }
+
+  mgrDisabled() {
+    const nextMgrDate = new Date(this.chama.nextMgrDate);
+    const today = new Date();
+    let verdict = true;
+
+    if (nextMgrDate <= today) {
+      // console.log(nextMgrDate.toLocaleDateString() + ' is in the past because today is ' + today.toLocaleDateString());
+      // console.log('so we need disabled needs to be false so we can click the disburse button');
+      verdict = false;
+    } else {
+      // console.log(nextMgrDate.toLocaleDateString() + ' is in the future because today is ' + today.toLocaleDateString());
+      // console.log('so disabled needs to be true until some time in the future');
+      verdict = true;
+    }
+
+    // TESTING
+    return false;
+  }
+
+  toggleDropdown(classOrId, dropItemIndex) {
+    // this.dropdownToggle = true;
+    const dropDownMenu = document.getElementsByClassName(classOrId);
+    if (this.dropdownToggle) {
+      dropDownMenu.item(dropItemIndex).setAttribute('style', 'display: block;');
+    } else {
+      dropDownMenu.item(dropItemIndex).setAttribute('style', 'display: none;');
+    }
+    this.dropdownToggle = this.dropdownToggle ? false : true;
   }
 }

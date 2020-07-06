@@ -14,6 +14,7 @@ export const ROUTES: RouteInfo[] = [
     { path: '/personal', title: 'Personal Account',  icon: 'ni-briefcase-24 text-blue', class: '' },
     { path: '/mgr', title: 'Merry Go Round',  icon: 'ni-money-coins text-orange', class: '' },
     { path: '/user-profile', title: 'User profile',  icon: 'ni-single-02 text-yellow', class: '' },
+    { path: '/admin', title: 'Admin Tools',  icon: 'ni-badge text-green', class: '' },
     // { path: '/tables', title: 'Tables',  icon: 'ni-bullet-list-67 text-red', class: '' },
     // { path: '/icons', title: 'Icons',  icon: 'ni-planet text-blue', class: '' },
     // { path: '/login', title: 'Login',  icon: 'ni-key-25 text-info', class: '' },

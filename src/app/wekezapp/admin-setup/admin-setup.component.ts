@@ -12,7 +12,7 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./admin-setup.component.scss']
 })
 export class AdminSetupComponent implements OnInit {
-  setupStepNumber = 3;
+  setupStepNumber = 4;
 
   chamaDto: Chama = new Chama();
   members: User[] = [];
@@ -33,6 +33,10 @@ export class AdminSetupComponent implements OnInit {
   // period = 2;
   minContribution = 200;
   contFine = 50;
+  loanRate = 15;
+
+  // step 4 (MGR)
+  mgrAmount = 150;
 
   constructor(
     private chamaService: ChamaService,
@@ -48,6 +52,13 @@ export class AdminSetupComponent implements OnInit {
     //   console.log(admin);
     //   this.members.push(admin);
     // });
+
+    // TESTING
+    // this.userService.getAllUsers()
+    // .subscribe( res => {
+    //   this.members = <User[]>res;
+    // });
+    // this.chamaDto.period = 1;
   }
 
   proceed() {
@@ -63,6 +74,7 @@ export class AdminSetupComponent implements OnInit {
         break;
 
       case 2:
+        console.log(this.members);
         if (this.members[0].role === 'Admin') {
           this.members.splice(0, 1);
         }
@@ -70,6 +82,7 @@ export class AdminSetupComponent implements OnInit {
           member.stake = (member.balance / this.totalAmt) * 100;
         });
         this.userService.addUsers(this.members).subscribe(res => {
+          this.members = [];
           console.log(res);
         });
         this.members = [];
@@ -84,7 +97,8 @@ export class AdminSetupComponent implements OnInit {
             this.chamaDto = res;
             this.chamaDto.period = period;
             this.chamaDto.minimumContribution = this.minContribution;
-            this.chamaDto.fineRate = this.contFine;
+            this.chamaDto.LatePaymentFineRate = this.contFine;
+            this.chamaDto.LoanInterestRate = this.loanRate;
             this.chamaService.updateChama(this.chamaDto)
               .subscribe(() => {
                 console.log('chama contribution details updated');
@@ -103,6 +117,10 @@ export class AdminSetupComponent implements OnInit {
         .subscribe(chama => {
           this.chamaDto = chama;
           this.chamaDto.mgrOrder = [];
+          this.chamaDto.mgrAmount = this.mgrAmount;
+          this.chamaDto.nextMgrReceiverIndex = 0;
+          this.chamaDto.nextMgrDate = this.getMGRDate(0);
+
           for (let i = 0; i < this.members.length; i++) {
             this.chamaDto.mgrOrder.push(this.members[i].userId);
           }
@@ -165,7 +183,7 @@ export class AdminSetupComponent implements OnInit {
     this.toggleDropdown('dropdown-content-name', toIndex);
   }
 
-  getMGRDate(index) {
+  getMGRDate(index, returnAsString = false) {
     let d = new Date();
     // I'm not giving the user a choice of which DAY the payout happens (it's sunday)
     if (this.chamaDto.period === 1) { // weekly
@@ -181,7 +199,7 @@ export class AdminSetupComponent implements OnInit {
         // set date to first day of next month
         d = new Date(d.getFullYear(), d.getMonth() + index + 1, 1);
     }
-    return d.toLocaleDateString();
+    return returnAsString ? d.toLocaleDateString() : d;
   }
 
   // skipSetup() {

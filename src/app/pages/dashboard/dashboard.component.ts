@@ -9,6 +9,10 @@ import {
   chartExample2
 } from '../../variables/charts';
 import { UserService } from 'src/app/services/user.service';
+import { NotificationType } from 'src/app/shared/flow-type.enum';
+import { LedgerService } from 'src/app/services/ledger.service';
+import { AuthService } from 'src/app/services/auth.service';
+// import { stat } from 'fs';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,14 +29,11 @@ export class DashboardComponent implements OnInit {
 
   private flowItems;
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private ledgerService: LedgerService, private authService: AuthService) { }
 
   ngOnInit() {
-    this.flowItems = this.userService.getFlow();
-    // this.userService.getFlow()
-    // .subscribe(res => {
-    //   console.log(res);
-    // });
+    this.processFlow();
+    // this.flowItems = this.userService.getFlow();
 
     this.datasets = [
       [0, 20, 10, 30, 15, 40, 20, 60, 60],
@@ -57,6 +58,53 @@ export class DashboardComponent implements OnInit {
       options: chartExample1.options,
       data: chartExample1.data
     });
+  }
+
+  processFlow() {
+    this.userService.getFlow()
+    .subscribe(res => {
+      console.log(res);
+      let flowItems = [];
+      flowItems = res;
+      flowItems.reverse();
+
+      for (let i = 0; i < flowItems.length; i++) {
+        const dateCreated = new Date(flowItems[i].dateCreated);
+        flowItems[i].newDateCreated = dateCreated.toDateString();
+
+        if (flowItems[i].isConfirmable) {
+          switch (flowItems[i].notificationType) {
+            case NotificationType.LoanRequestAsAdmin:
+              if (flowItems[i].status === 'Pending') {
+                flowItems[i].actionType = 'Approve Reject';
+              } else {
+                flowItems[i].actionType = 'Status';
+              }
+
+              break;
+              case NotificationType.LoanRequestAsRequester:
+                flowItems[i].actionType = 'Status';
+
+              break;
+          }
+        }
+      }
+      this.flowItems = flowItems;
+    });
+  }
+
+  evaluateLoan(flowItemIndex, evaluation) {
+    this.ledgerService.getTransactionById(this.flowItems[flowItemIndex].transactionId)
+      .subscribe(loan => {
+        loan.evaluatedBy = this.authService.currentUser.UserId;
+        if (evaluation === 'approved') {
+          loan.approved = true;
+        }
+        this.ledgerService.evaluateLoan(loan)
+        .subscribe(evaluatedLoan => {
+          console.log(evaluatedLoan);
+        });
+      });
   }
 
   public updateOptions() {

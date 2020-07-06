@@ -3,13 +3,13 @@
     <div class="header-body">
       <!-- Card stats -->
       <div class="row">
-        <div class="col-xl-3 col-lg-6">
+        <div class="col-xl-6 col-lg-6">
           <div class="card card-stats mb-4 mb-xl-0">
             <div class="card-body">
               <div class="row">
                 <div class="col">
-                  <h5 class="card-title text-uppercase text-muted mb-0">Traffic</h5>
-                  <span class="h2 font-weight-bold mb-0">350,897</span>
+                  <h5 class="card-title text-uppercase text-muted mb-0">Savings</h5>
+                  <span class="h2 font-weight-bold mb-0">Ksh. 5,000</span>
                 </div>
                 <div class="col-auto">
                   <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
@@ -24,13 +24,13 @@
             </div>
           </div>
         </div>
-        <div class="col-xl-3 col-lg-6">
+        <div class="col-xl-6 col-lg-6">
           <div class="card card-stats mb-4 mb-xl-0">
             <div class="card-body">
               <div class="row">
                 <div class="col">
-                  <h5 class="card-title text-uppercase text-muted mb-0">New users</h5>
-                  <span class="h2 font-weight-bold mb-0">2,356</span>
+                  <h5 class="card-title text-uppercase text-muted mb-0">Stake</h5>
+                  <span class="h2 font-weight-bold mb-0">33%</span>
                 </div>
                 <div class="col-auto">
                   <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
@@ -45,60 +45,18 @@
             </div>
           </div>
         </div>
-        <div class="col-xl-3 col-lg-6">
-          <div class="card card-stats mb-4 mb-xl-0">
-            <div class="card-body">
-              <div class="row">
-                <div class="col">
-                  <h5 class="card-title text-uppercase text-muted mb-0">Sales</h5>
-                  <span class="h2 font-weight-bold mb-0">924</span>
-                </div>
-                <div class="col-auto">
-                  <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
-                    <i class="fas fa-users"></i>
-                  </div>
-                </div>
-              </div>
-              <p class="mt-3 mb-0 text-muted text-sm">
-                <span class="text-warning mr-2"><i class="fas fa-arrow-down"></i> 1.10%</span>
-                <span class="text-nowrap">Since yesterday</span>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-lg-6">
-          <div class="card card-stats mb-4 mb-xl-0">
-            <div class="card-body">
-              <div class="row">
-                <div class="col">
-                  <h5 class="card-title text-uppercase text-muted mb-0">Performance</h5>
-                  <span class="h2 font-weight-bold mb-0">49,65%</span>
-                </div>
-                <div class="col-auto">
-                  <div class="icon icon-shape bg-info text-white rounded-circle shadow">
-                    <i class="fas fa-percent"></i>
-                  </div>
-                </div>
-              </div>
-              <p class="mt-3 mb-0 text-muted text-sm">
-                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 12%</span>
-                <span class="text-nowrap">Since last month</span>
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
 </div>
 <div class="container-fluid mt--7">
   <div class="row">
-    <div class="col-xl-6 mb-5 mb-xl-0">
+    <div class="col-xl-12 mb-5 mb-xl-0">
       <div class="card shadow mb-5">
         <div class="card-header border-0 bg-light">
           <div class="row align-items-center">
             <div class="col">
-              <h3 class="mb-0">Notifications</h3>
+              <h3 class="mb-0">Announcements</h3>
             </div>
             <div class="col text-right">
               <a href="#!" class="btn btn-sm btn-primary">See all</a>
@@ -106,9 +64,24 @@
           </div>
         </div>
         <div class="card">
-          <div *ngFor="let flowItem of flowItems | async" class="col wp-notification-item col-xl-12">
+          <div *ngFor="let flowItem of flowItems; let i = index" class="col wp-notification-item col-xl-12">
             <span class="wp-notification-text">{{ flowItem.body }}</span>
-            <h6 class="text-uppercase ls-1 wp-notification-time" style="color: #525f7f;">{{ flowItem.dateCreated }}</h6>
+            <div *ngIf="flowItem.isConfirmable" class="row">
+              <div class="col text-right">
+                <span *ngIf="flowItem.actionType == 'Confirm Only'">
+                  <button class="btn btn-sm btn-primary">Confirm</button>
+                </span>
+                <span *ngIf="flowItem.actionType == 'Approve Reject'">
+                  <button (click)="evaluateLoan(i, 'approved')" [disabled]="flowItem.status == 'Approved' || flowItem.status == 'Rejected'" class="btn btn-sm btn-success">Approve</button>
+                  <button (click)="evaluateLoan(i, 'rejected')" [disabled]="flowItem.status == 'Approved' || flowItem.status == 'Rejected'" class="btn btn-sm btn-danger">Reject</button>
+                </span>
+                <span *ngIf="flowItem.actionType == 'Status'">
+                  <span *ngIf="flowItem.status == 'Rejected'" class="badge badge-danger" style="text-transform: capitalize;">{{ flowItem.status }}</span>
+                  <span *ngIf="flowItem.status != 'Rejected'" class="badge badge-default" style="text-transform: capitalize;">{{ flowItem.status }}</span>
+                </span>
+              </div>
+            </div>
+            <h6 class="text-uppercase ls-1 wp-notification-time" style="color: #525f7f;">{{ flowItem.newDateCreated }}</h6>
           </div>
           <!-- <div class="col wp-notification-item col-xl-12">
             <span class="wp-notification-text">Fred Makoha added you and 6 other members to The OG</span>
@@ -129,7 +102,7 @@
         </div>
       </div>
     </div>
-    <div class="col-xl-6 mb-5 mb-xl-0">
+    <!-- <div class="col-xl-6 mb-5 mb-xl-0">
       <div class="card bg-gradient-default shadow">
         <div class="card-header bg-transparent">
           <div class="row align-items-center">
@@ -156,9 +129,7 @@
           </div>
         </div>
         <div class="card-body">
-          <!-- Chart -->
           <div class="chart">
-            <!-- Chart wrapper -->
             <canvas id="chart-sales" class="chart-canvas"></canvas>
           </div>
         </div>
@@ -175,16 +146,15 @@
           </div>
         </div>
         <div class="card-body">
-          <!-- Chart -->
           <div class="chart">
             <canvas id="chart-orders" class="chart-canvas"></canvas>
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
   <div class="row mt-5">
-    <div class="col-xl-8 mb-5 mb-xl-0">
+    <!-- <div class="col-xl-8 mb-5 mb-xl-0">
       <div class="card shadow">
         <div class="card-header border-0">
           <div class="row align-items-center">
@@ -197,7 +167,6 @@
           </div>
         </div>
         <div class="table-responsive">
-          <!-- Projects table -->
           <table class="table align-items-center table-flush">
             <thead class="thead-light">
               <tr>
@@ -296,7 +265,6 @@
           </div>
         </div>
         <div class="table-responsive">
-          <!-- Projects table -->
           <table class="table align-items-center table-flush">
             <thead class="thead-light">
               <tr>
@@ -400,6 +368,6 @@
           </table>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </div>
