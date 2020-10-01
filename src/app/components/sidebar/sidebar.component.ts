@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import * as jdenticon from 'node_modules/jdenticon';
 
 declare interface RouteInfo {
     path: string;
@@ -34,10 +35,19 @@ export class SidebarComponent implements OnInit {
   constructor(private router: Router, private authService: AuthService) { }
 
   ngOnInit() {
-    this.menuItems = ROUTES.filter(menuItem => menuItem);
+    this.menuItems = ROUTES.filter((menuItem) => {
+      if (!this.authService.currentUserIsAdmin) {
+        if (menuItem.path === '/admin') {
+          return null;
+        }
+      }
+      return menuItem;
+    });
     this.router.events.subscribe((event) => {
       this.isCollapsed = true;
    });
+   document.getElementById('wp-navbar-icon-sidebar').setAttribute('data-jdenticon-value', this.authService.currentUser.UserId);
+    // jdenticon();
   }
 
   logout() {

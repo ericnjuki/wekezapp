@@ -12,14 +12,15 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./admin-setup.component.scss']
 })
 export class AdminSetupComponent implements OnInit {
-  setupStepNumber = 4;
+  setupStepNumber = 2;
 
   chamaDto: Chama = new Chama();
   members: User[] = [];
   member: User = {};
 
   // step 1 (chama general)
-  chamaName = 'The Cobras';
+  chamaName = 'Nairobi Welfare Group';
+  chamaBalance = 100000;
 
   // step 2 (members + info)
   dropdownToggle = true;
@@ -65,6 +66,7 @@ export class AdminSetupComponent implements OnInit {
     switch (this.setupStepNumber) {
       case 1:
         this.chamaDto.chamaName = this.chamaName;
+        this.chamaDto.balance = this.chamaBalance;
         this.chamaService.createChama(this.chamaDto)
           .subscribe(res => {
             console.log('Created chama ' + this.chamaName);
@@ -149,8 +151,39 @@ export class AdminSetupComponent implements OnInit {
     this.member.balance = this.personalAmt;
     this.totalAmt += this.personalAmt;
     this.members.push(this.member);
-    console.log(this.member);
-    // this.dummyField = '';
+    this.totalAmt = 14504.5;
+
+    // this.members = [
+    //   {
+    //     firstName: 'Jane Dora',
+    //     email: 'ericnjuki@gmail.com',
+    //     password: 'secure123',
+    //     balance: 6660,
+    //     role: 'Secretary'
+    //   },
+    //   {
+    //     firstName: 'Kevin Llama',
+    //     email: 'eric.njuki@gmail.com',
+    //     password: 'secure123',
+    //     balance: 2400,
+    //     role: 'Treasurer'
+    //   },
+    //   {
+    //     firstName: 'Aspen Awesome',
+    //     email: 'ericnjuki+aspen@gmail.com',
+    //     password: 'secure123',
+    //     balance: 4321,
+    //     role: 'Member'
+    //   },
+    //   {
+    //     firstName: 'Samwise Gamji',
+    //     email: 'ericnj.uki@gmail.com',
+    //     password: 'secure123',
+    //     balance: 1123.5,
+    //     role: 'Member'
+    //   },
+    // ];
+    // console.log(this.member);
     this.member = {};
     this.roleText = '<Role>';
   }

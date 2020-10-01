@@ -15,7 +15,6 @@
                 <th scope="col">Amount</th>
                 <th scope="col">% Paid</th>
                 <th scope="col">Status</th>
-                <!-- <th scope="col" *ngIf="authService.isCurrentUserAdmin()">Action</th> -->
                 <th scope="col">Action</th>
               </tr>
             </thead>
@@ -43,135 +42,46 @@
                     <i [class]="getLoanStatus(loan.amountPaidSoFar, loan.amountPayable, loan.approved, true)"></i> {{ getLoanStatus(loan.amountPaidSoFar, loan.amountPayable, loan.approved) }}
                   </span>
                 </td>
-              </tr>
-              <tr>
-                <td>23/04/18</td>
-                <td>Ksh. 60,000</td>
-                <td>
-                  <div class="d-flex align-items-center">
-                    <span class="mr-2">60%</span>
-                    <div>
-                      <div class="progress">
-                        <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
+                <td *ngIf="getLoanStatus(loan.amountPaidSoFar, loan.amountPayable, loan.approved) == 'unpaid' || getLoanStatus(loan.amountPaidSoFar, loan.amountPayable, loan.approved) == 'half-paid'">
+                  <div class="ddown">
+                    <button class="ddown-toggle btn btn-sm text-light bg-info" (click)="toggleDropdown('ddown-content-pay-loan')">pay</button>
+                    <div class="ddown-content ddown-content-pay-loan mt-2">
+                      <div class="row form-group" style="margin-bottom: 0;padding: 1em;border-radius: 5px;">
+                        <div class="col-xl-8">
+                          <div class="input-group input-group-alternative mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text text-sm">Amt: </span>
+                            </div>
+                            <input type="text" name="input-pay-loan-amt" class="form-control" placeholder="amount" (input)="amtChange()" [(ngModel)]="tableLoanPaymentAmount">
+                          </div>
+                        </div>
+                        <div class="col-xl-4">
+                          <button (click)="payLoan(loan.transactionId, true)" class="btn btn-sm btn-success mt-2">Pay</button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </td>
-                <td>
-                  <span class="badge badge-dot mr-4">
-                    <i class="bg-warning"></i> half-paid
-                  </span>
-                </td>
-                <td class="text-right">
-                  <div ngbDropdown placement="bottom-right">
-                    <a class="btn btn-sm btn-icon-only text-light"  ngbDropdownToggle>
-                      <i class="fas fa-ellipsis-v"></i>
-                    </a>
+                  <!-- <div ngbDropdown  placement="bottom-right">
+                    <button class="btn btn-sm text-light bg-info"  ngbDropdownToggle>
+                      pay
+                    </button>
                     <div ngbDropdownMenu class=" dropdown-menu-right dropdown-menu-arrow">
-                      <a class="dropdown-item" href="javascript:void(0)">Action</a>
-                      <a class="dropdown-item" href="javascript:void(0)">Another action</a>
-                      <a class="dropdown-item" href="javascript:void(0)">Something else here</a>
+                      <input type="text" name="input-pay-loan-amt" placeholder="amount" [(ngModel)]="tableLoanPaymentAmount">
+                      <button (click)="payLoan(loan.transactionId, true)" class="btn btn-sm btn-success">Pay</button>
                     </div>
-                  </div>
+                  </div> -->
                 </td>
               </tr>
-              <tr>
-                <td>23/04/18</td>
-                <td>Ksh. 20,000</td>
-                <td>
-                  <div class="d-flex align-items-center">
-                    <span class="mr-2">100%</span>
-                    <div>
-                      <div class="progress">
-                        <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <span class="badge badge-dot mr-4">
-                    <i class="bg-success"></i> paid
-                  </span>
-                </td>
-                <td class="text-right">
-                  <div ngbDropdown placement="bottom-right">
-                    <a class="btn btn-sm btn-icon-only text-light"  ngbDropdownToggle>
-                      <i class="fas fa-ellipsis-v"></i>
-                    </a>
-                    <div ngbDropdownMenu class=" dropdown-menu-right dropdown-menu-arrow">
-                      <a class="dropdown-item" href="javascript:void(0)">Action</a>
-                      <a class="dropdown-item" href="javascript:void(0)">Another action</a>
-                      <a class="dropdown-item" href="javascript:void(0)">Something else here</a>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-              <!-- <tr>
-                <th scope="row">3</th>
-                <td>23/04/18</td>
-                <td>Ksh. 20,000</td>
-                <td>09/11/18</td>
-                <td>
-                  <div class="d-flex align-items-center">
-                    <span class="mr-2">100%</span>
-                    <div>
-                      <div class="progress">
-                        <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <span class="badge badge-dot mr-4">
-                    <i class="bg-success"></i> paid
-                  </span>
-                </td>
-                <td class="text-right">
-                  <div ngbDropdown placement="bottom-right">
-                    <a class="btn btn-sm btn-icon-only text-light"  ngbDropdownToggle>
-                      <i class="fas fa-ellipsis-v"></i>
-                    </a>
-                    <div ngbDropdownMenu class=" dropdown-menu-right dropdown-menu-arrow">
-                      <a class="dropdown-item" href="javascript:void(0)">Action</a>
-                      <a class="dropdown-item" href="javascript:void(0)">Another action</a>
-                      <a class="dropdown-item" href="javascript:void(0)">Something else here</a>
-                    </div>
-                  </div>
-                </td>
-              </tr> -->
             </tbody>
           </table>
         </div>
-        <div class="card-footer bg-default py-4">
-          <nav aria-label="...">
-            <ul class="pagination justify-content-end mb-0">
-              <li class="page-item disabled">
-                <a class="page-link" href="javascript:void(0)" tabindex="-1">
-                  <i class="fas fa-angle-left"></i>
-                  <span class="sr-only">Previous</span>
-                </a>
-              </li>
-              <li class="page-item active">
-                <a class="page-link" href="javascript:void(0)">1</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="javascript:void(0)">2 <span class="sr-only">(current)</span></a>
-              </li>
-              <li class="page-item"><a class="page-link" href="javascript:void(0)">3</a></li>
-              <li class="page-item">
-                <a class="page-link" href="javascript:void(0)">
-                  <i class="fas fa-angle-right"></i>
-                  <span class="sr-only">Next</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
+
       </div>
     </div>
   </div>
   
   <div class="row">
+    <!-- request loan -->
     <div class="col-xl-6 mb-5">
       <div class="card wp-card shadow mb-4">
         <div class="card-header bg-transparent">
@@ -187,7 +97,7 @@
             <div class="col-lg-6">
               <div class="form-group">
                 <label class="form-control-label" for="input-request-loan-amount">Enter amount</label>
-                <input type="number" [(ngModel)]="loanRequestAmount" name="input-request-loan-amount" id="input-request-loan-amount" class="form-control form-control-alternative" placeholder="Amount" value="1000">
+                <input type="text" (input)="amtChange()" [(ngModel)]="loanRequestAmount" name="input-request-loan-amount" id="input-request-loan-amount" class="form-control form-control-alternative" placeholder="Amount" value="1000">
               </div>
             </div>
             <div class="col-lg-6">
@@ -201,6 +111,7 @@
       </div>
     </div>
 
+    <!-- pay loan -->
     <div class="col-xl-6 mb-5">
       <div class="card bg-light wp-card shadow">
         <div class="card-header bg-transparent">
@@ -217,9 +128,9 @@
               <div class="form-group">
                 <label class="form-control-label" for="input-first-name">Select Loan</label>
                 <div class="ddown">
-                  <button class="ddown-toggle btn form-control" (click)="toggleDropdown('ddown-content-loan')">{{ selectedLoan }}</button>
-                  <div class="ddown-content ddown-content-loan" style="width: 100%;">
-                    <p *ngFor="let myLoan of myLoansDropdown" (click)="selectLoan(myLoan)">Ksh {{ myLoan.amount }}</p>
+                  <button class="ddown-toggle btn form-control" (click)="toggleDropdown('ddown-content-pay-loan-widget')">{{ selectedLoan }}</button>
+                  <div class="ddown-content ddown-content-pay-loan-widget" style="width: 100%;">
+                    <p *ngFor="let anMyLoan of myLoansDropdown" (click)="selectLoan(anMyLoan)">Ksh {{ anMyLoan.amount }}</p>
                   </div>
                 </div>
               </div>
@@ -227,13 +138,13 @@
             <div class="col-lg-6">
               <div class="form-group">
                 <label class="form-control-label" for="input-repay-loan-amount">Amount to Pay</label>
-                <input type="number" [(ngModel)]="loanRepaymentAmount" name="input-repay-loan-amount" id="input-repay-loan-amount" class="form-control form-control-alternative" placeholder="Amount" value="500">
+                <input type="text" (input)="amtChange()" [(ngModel)]="loanRepaymentAmount" name="input-repay-loan-amount" id="input-repay-loan-amount" class="form-control form-control-alternative" placeholder="Amount">
               </div>
             </div>
             <div class="offset-6 col-lg-6">
               <div class="form-group">
                 <label for="" class="text-default">.</label>
-                <input type="button" (click)="repayLoan()" class="btn btn-success form-control form-control-alternative" value="Pay">
+                <input type="button" (click)="payLoan()" class="btn btn-success form-control form-control-alternative" value="Pay">
               </div>
             </div>
           </div>
@@ -242,8 +153,8 @@
     </div>
   </div>
 
-  <!-- <div *ngIf="authService.isCurrentUserAdmin()"> -->
-  <div>
+  <div *ngIf="authService.currentUserIsAdmin">
+  <!-- <div> -->
     <div class="row mt-6">
       <div class="col col-xl-12">
         <h1>Admin Tools</h1>
@@ -251,6 +162,7 @@
       </div>
     </div>
   
+    <!-- all loans table -->
     <div class="row">
       <div class="col col-xl-12">
         <div class="card bg-light shadow">
@@ -272,7 +184,7 @@
               <tbody>
                 <tr *ngFor="let loan of allLoans">
                   <td>{{ loan.receipient }}</td>
-                  <td>Ksh. {{ loan.amount }}</td>
+                  <td>Ksh. {{ loan.amount.toLocaleString() }}</td>
                   <td *ngIf="!loan.approved">pending</td>
                   <td *ngIf="loan.approved">{{ loan.dateIssued }}</td>
                   <td *ngIf="!loan.approved">pending</td>
@@ -290,35 +202,11 @@
               </tbody>
             </table>
           </div>
-          <div class="card-footer bg-light py-4">
-            <nav aria-label="...">
-              <ul class="pagination justify-content-end mb-0">
-                <li class="page-item disabled">
-                  <a class="page-link" href="javascript:void(0)" tabindex="-1">
-                    <i class="fas fa-angle-left"></i>
-                    <span class="sr-only">Previous</span>
-                  </a>
-                </li>
-                <li class="page-item active">
-                  <a class="page-link" href="javascript:void(0)">1</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="javascript:void(0)">2 <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="page-item"><a class="page-link" href="javascript:void(0)">3</a></li>
-                <li class="page-item">
-                  <a class="page-link" href="javascript:void(0)">
-                    <i class="fas fa-angle-right"></i>
-                    <span class="sr-only">Next</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
         </div>
       </div>
     </div>
   
+    <!-- add existing loan -->
     <div class="row mt-5">
       <div class="col-xl-6 mb-5">
         <div class="card shadow wp-card">
@@ -334,11 +222,11 @@
             <div class="row">
               <div class="col-lg-12">
                 <div class="form-group">
-                  <label class="form-control-label" for="dropdown-existing-loan-receipient">Receipient</label>
+                  <label class="form-control-label" for="btn-existing-loan-receipient">Receipient</label>
                   <div class="ddown">
-                    <button class="ddown-toggle btn form-control" (click)="toggleDropdown('ddown-content-name-loan')" name="dropdown-existing-loan-receipient">{{ selectedLoanee }}</button>
-                    <div class="ddown-content ddown-content-name-existing-loan" style="width: 100%;">
-                      <p *ngFor="let loanee of membersNamesList" (click)="selectExistingLoanReceipient(loanee)">{{ loanee }}</p>
+                    <button class="ddown-toggle btn form-control" (click)="toggleDropdown('ddown-existing-loan-receipient')" name="btn-existing-loan-receipient">{{ selectedLoanee }}</button>
+                    <div class="ddown-content ddown-existing-loan-receipient" style="width: 100%;">
+                      <p *ngFor="let loanee of membersNamesList" (click)="selectExistingLoanReceipient(loanee)">{{ loanee.name }}</p>
                     </div>
                   </div>
                 </div>
@@ -346,25 +234,31 @@
               <div class="col-lg-6">
                 <div class="form-group">
                   <label class="form-control-label" for="input-existing-loan-amount">Loan Amount</label>
-                  <input type="number" name="input-existing-loan-amount" id="input-existing-loan-amount" class="form-control form-control-alternative" placeholder="Loan Amount" value="1000">
+                  <input type="text" (input)="amtChange()" [(ngModel)]="existingLoanAmount" name="input-existing-loan-amount" id="input-existing-loan-amount" class="form-control form-control-alternative" placeholder="Loan Amount">
                 </div>
               </div>
-              <div class="col-lg-6">
+              <div class="col-lg-5">
                 <div class="form-group">
                   <label class="form-control-label" for="input-existing-loan-rate">Interest Rate</label>
-                  <input type="text" name="input-existing-loan-rate" id="input-existing-loan-rate" class="form-control form-control-alternative" placeholder="Rate" value="5%">
+                  <input type="text" [(ngModel)]="existingLoanRate" name="input-existing-loan-rate" id="input-existing-loan-rate" class="form-control form-control-alternative" placeholder="Rate">
+                </div>
+              </div>
+              <div class="col-lg-1">
+                <div class="form-group">
+                  <label class="form-control-label">.</label>
+                  <label class="form-control-label mt-3">%</label>
                 </div>
               </div>
               <div class="col-lg-12">
                 <div class="form-group">
                   <label class="form-control-label" for="input-existing-loan-issue-date">Date Issued</label>
-                  <input type="date" name="input-existing-loan-issue-date" id="input-existing-loan-issue-date" class="form-control form-control-alternative">
+                  <input type="date" [(ngModel)]="existingLoanIssuedDate" name="input-existing-loan-issue-date" id="input-existing-loan-issue-date" class="form-control form-control-alternative">
                 </div>
               </div>
               <div class="col-lg-12">
                 <div class="form-group">
                   <label class="form-control-label" for="input-existing-loan-due-date">Due Date</label>
-                  <input type="date" name="input-existing-loan-due-date" id="input-existing-loan-due-date" class="form-control form-control-alternative">
+                  <input type="date" [(ngModel)]="existingLoanDueDate" name="input-existing-loan-due-date" id="input-existing-loan-due-date" class="form-control form-control-alternative">
                 </div>
               </div>
               <div class="offset-6 col-lg-6">

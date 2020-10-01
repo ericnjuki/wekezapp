@@ -7,8 +7,9 @@ export class Chama {
   public period?: number;
   public LoanInterestRate?: number;
   public mgrOrder?: number[];
-  public mgrAmount?: number;
+  public mgrAmount?: any;
   public nextMgrReceiverIndex?: number;
   public nextMgrDate?;
   public setupComplete?: boolean;
+  public totalOwed?: number;
 }

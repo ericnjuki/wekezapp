@@ -77,6 +77,7 @@ export class UserService {
   }
 
   updateUser(user: User) {
+    user.updatedBy = this.authService.currentUser.UserId;
     console.log('updating user...');
     console.log(user);
     return this.http.put(this._url, user);

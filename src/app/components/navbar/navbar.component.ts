@@ -3,6 +3,7 @@ import { ROUTES } from '../sidebar/sidebar.component';
 import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import * as jdenticon from 'node_modules/jdenticon';
 
 @Component({
   selector: 'app-navbar',
@@ -19,19 +20,20 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     this.listTitles = ROUTES.filter(listTitle => listTitle);
+    document.getElementById('wp-navbar-icon').setAttribute('data-jdenticon-value', this.authService.currentUser.UserId);
+    jdenticon();
   }
-  getTitle(){
-    var titlee = this.location.prepareExternalUrl(this.location.path());
-    if(titlee.charAt(0) === '#'){
+  getTitle() {
+    let titlee = this.location.prepareExternalUrl(this.location.path());
+    if (titlee.charAt(0) === '#') {
         titlee = titlee.slice( 1 );
     }
 
-    for(var item = 0; item < this.listTitles.length; item++){
-        if(this.listTitles[item].path === titlee){
+    for (let item = 0; item < this.listTitles.length; item++) {
+        if (this.listTitles[item].path === titlee) {
             return this.listTitles[item].title;
         }
     }
     return 'Dashboard';
   }
-
 }

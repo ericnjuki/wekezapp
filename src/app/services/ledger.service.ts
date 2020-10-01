@@ -20,12 +20,67 @@ export class LedgerService {
     .post(this._url + 'requestPersonalDeposit', transac);
   }
 
+  confirmPersonalDeposit(transactionId) {
+    const confirmerId = this.authService.currentUser.UserId;
+    return this.http
+    .post(this._url + 'confirmPersonalDeposit/' + transactionId + '/' + confirmerId, true)
+    .pipe(map((response) => response.json()));
+  }
+
+  requestPersonalWithdrawal(transac) {
+    console.log(transac);
+    return this.http
+    .post(this._url + 'requestPersonalWithdrawal', transac);
+  }
+
+  confirmPersonalWithdrawal(transactionId) {
+    const confirmerId = this.authService.currentUser.UserId;
+    return this.http
+    .post(this._url + 'confirmPersonalWithdrawal/' + transactionId + '/' + confirmerId, true)
+    .pipe(map((response) => response.json()));
+  }
+
+  requestChamaDeposit(transac) {
+    transac.DepositorId = this.authService.currentUser.UserId;
+    console.log(transac);
+    return this.http
+    .post(this._url + 'requestChamaDeposit', transac);
+  }
+
+  confirmChamaDeposit(transactionId) {
+    const confirmerId = this.authService.currentUser.UserId;
+    return this.http
+    .post(this._url + 'confirmChamaDeposit/' + transactionId + '/' + confirmerId, true)
+    .pipe(map((response) => response.json()));
+  }
+
+  requestChamaWithdrawal(transac) {
+    transac.WithdrawerId = this.authService.currentUser.UserId;
+    console.log(transac);
+    return this.http
+    .post(this._url + 'requestChamaWithdrawal', transac);
+  }
+
+  confirmChamaWithdrawal(transactionId) {
+    const confirmerId = this.authService.currentUser.UserId;
+    return this.http
+    .post(this._url + 'confirmChamaWithdrawal/' + transactionId + '/' + confirmerId, true)
+    .pipe(map((response) => response.json()));
+  }
+
+
   requestLoan(amount) {
     const receiverId = this.authService.currentUser.UserId;
 
     console.log({receiverId, amount, dateRequested: new Date()});
     return this.http
     .post(this._url + 'requestLoan', {receiverId, amount, dateRequested: new Date()})
+    .pipe(map((response) => response.json()));
+  }
+
+  addExistingLoan(loan) {
+    return this.http
+    .post(this._url + 'requestLoan', loan)
     .pipe(map((response) => response.json()));
   }
 
@@ -37,7 +92,7 @@ export class LedgerService {
 
   repayLoan(loanId, amount) {
     return this.http
-    .post(this._url + 'repayLoan', {loanId, amount})
+    .post(this._url + 'payLoan/' + loanId + '/' + amount, true)
     .pipe(map((response) => response.json()));
   }
 
@@ -91,6 +146,30 @@ export class LedgerService {
     console.log(transactionId);
     return this.http
     .post(this._url + 'disburseMgr/' + transactionId, true)
+    .pipe(map((response) => response.json()));
+  }
+
+  createContributions() {
+    return this.http
+    .get(this._url + 'createContributions');
+  }
+
+  contributeToChama(amountToContribute, startWithOld) {
+    console.log(amountToContribute, startWithOld);
+    this.options.params = new URLSearchParams(
+      'userId=' + this.authService.currentUser.UserId +
+      '&amount=' + amountToContribute +
+      '&startWithOld=' + startWithOld
+    );
+    return this.http
+    .get(this._url + 'payContribution', this.options)
+    .pipe(map((response) => response.json()));
+  }
+
+  payout(userId, amount) {
+    console.log(userId + ',' + amount);
+    return this.http
+    .post(this._url + 'payout/' + userId + '/' + amount + '/' + this.authService.currentUser.UserId, true)
     .pipe(map((response) => response.json()));
   }
 }

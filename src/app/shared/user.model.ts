@@ -8,4 +8,7 @@ export class User {
   public token?: string;
   public balance?: number;
   public stake?;
+  public outstandingContributions?: number;
+  public outstandingLoans?: number;
+  public updatedBy?: number;
 }

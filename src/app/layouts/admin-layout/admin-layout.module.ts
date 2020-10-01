@@ -17,6 +17,7 @@ import { MerryGoRoundComponent } from 'src/app/wekezapp/merry-go-round/merry-go-
 import { PersonalAccountComponent } from 'src/app/wekezapp/personal-account/personal-account.component';
 import { LoansComponent } from 'src/app/wekezapp/loans/loans.component';
 import { AdminPanelComponent } from 'src/app/wekezapp/admin-panel/admin-panel.component';
+import { ToastyModule } from 'ng2-toasty';
 // import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
@@ -26,7 +27,7 @@ import { AdminPanelComponent } from 'src/app/wekezapp/admin-panel/admin-panel.co
     FormsModule,
     HttpClientModule,
     NgbModule,
-    ClipboardModule
+    ClipboardModule,
   ],
   declarations: [
     DashboardComponent,

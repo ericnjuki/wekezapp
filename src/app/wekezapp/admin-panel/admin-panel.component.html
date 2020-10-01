@@ -7,6 +7,7 @@
 
 <div class="container-fluid mt--7">
   <div class="row">
+    <!-- new member -->
     <div class="col-xl-6 mb-5">
       <div class="card bg-default shadow wp-card">
         <div class="card-header bg-transparent">
@@ -47,7 +48,7 @@
             <div class="col-lg-6">
               <div class="form-group">
                 <label class="form-control-label text-light" for="input-new-member-amount">Amount In Account</label>
-                <input type="number" [(ngModel)]="member.balance" name="input-new-member-amount" id="input-new-member-amount" class="form-control form-control-alternative" placeholder="Amount">
+                <input type="text" (input)="amtChange()" [(ngModel)]="member.balance2" name="input-new-member-amount" id="input-new-member-amount" class="form-control form-control-alternative" placeholder="Amount">
               </div>
             </div>
             <div class="col-lg-6">
@@ -61,6 +62,7 @@
       </div>
     </div>
 
+    <!-- edit member balance -->
     <div class="col-xl-6 mb-xl-0">
       <div class="card shadow wp-card">
         <div class="card-header bg-transparent">
@@ -87,7 +89,7 @@
             <div class="col-lg-6">
               <div class="form-group">
                 <label class="form-control-label" for="input-new-account-amount">Account Amount</label>
-                <input [(ngModel)]="accountEditeeAmount" type="number" id="input-new-account-amount" class="form-control form-control-alternative" placeholder="Amount">
+                <input (input)="amtChange()" [(ngModel)]="accountEditeeAmount" type="text" id="input-new-account-amount" class="form-control form-control-alternative" placeholder="Amount">
               </div>
             </div>
             <div class="col-lg-6">
@@ -103,50 +105,7 @@
   </div>
 
   <div class="row mt-5">
-    <div class="col-xl-6 mb-xl-0">
-      <div class="card shadow wp-card">
-        <div class="card-header bg-transparent">
-          <div class="row align-items-center">
-            <div class="col">
-              <h6 class="text-uppercase ls-1 mb-1">admin</h6>
-              <h2 class="mb-0">Transfer Chama Funds to Member</h2>
-            </div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="form-group">
-                <label class="form-control-label" for="input-first-name">Member</label>
-                <div class="ddown">
-                  <button class="ddown-toggle btn form-control" (click)="toggleDropdown('ddown-content-name-payout')">{{ selectedPayoutee }}</button>
-                  <div class="ddown-content ddown-content-name-payout" style="width: 100%;">
-                    <p *ngFor="let payoutee of membersNamesList" (click)="selectPayoutReceipient(payoutee)">{{ payoutee }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-6">
-              <div class="form-group">
-                <label class="form-control-label text-white" for="input-transfer-amount">Enter amount</label>
-                <input type="number" name="input-transfer-amount" id="input-transfer-amount" class="form-control form-control-alternative" placeholder="Amount" [(ngModel)]="depositAmt">
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="form-group">
-                <label for="" class="text-default">.</label>
-                <input (click)="requestPersonalDeposit()" type="button" id="input-last-name" class="btn btn-success form-control form-control-alternative" value="Transfer">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row mt-5">
+    <!-- chama deposit -->
     <div class="col-xl-6 mb-5 mb-xl-0">
       <div class="card bg-light shadow">
         <div class="card-header bg-transparent">
@@ -162,13 +121,13 @@
             <div class="col-lg-6">
               <div class="form-group">
                 <label class="form-control-label" for="input-chama-deposit-amount">Enter amount</label>
-                <input type="number" name="input-chama-deposit-amount" id="input-chama-deposit-amount" class="form-control form-control-alternative" placeholder="Amount" [(ngModel)]="depositAmt">
+                <input type="text" name="input-chama-deposit-amount" id="input-chama-deposit-amount" class="form-control form-control-alternative" placeholder="Amount" (input)="amtChange()" [(ngModel)]="chamaDepositAmount">
               </div>
             </div>
             <div class="col-lg-6">
               <div class="form-group">
                 <label for="" class="text-light">.</label>
-                <input (click)="requestPersonalDeposit()" type="button" id="input-last-name" class="btn btn-success form-control form-control-alternative" value="Deposit">
+                <input (click)="requestChamaDeposit()" type="button" id="btn-chama-deposit" class="btn btn-success form-control form-control-alternative" value="Deposit">
               </div>
             </div>
           </div>
@@ -176,6 +135,7 @@
       </div>
     </div>
 
+    <!-- chama withdrawal -->
     <div class="col-xl-6 mb-5 mb-xl-0">
       <div class="card bg-light shadow">
         <div class="card-header bg-transparent">
@@ -191,13 +151,13 @@
             <div class="col-lg-6">
               <div class="form-group">
                 <label class="form-control-label" for="input-chama-withdrawal-amount">Enter amount</label>
-                <input type="number" name="input-chama-withdrawal-amount" id="input-chama-withdrawal-amount" class="form-control form-control-alternative" placeholder="Amount" value="1000">
+                <input type="text" name="input-chama-withdrawal-amount" id="input-chama-withdrawal-amount" class="form-control form-control-alternative" placeholder="Amount" (input)="amtChange()" [(ngModel)]="chamaWithdrawalAmount">
               </div>
             </div>
             <div class="col-lg-6">
               <div class="form-group">
                 <label for="" class="text-white">.</label>
-                <input type="button" id="input-last-name" class="btn btn-success form-control form-control-alternative" value="Withdraw">
+                <input (click)="requestChamaWithdrawal()" type="button" id="btn-chama-withdrawal" class="btn btn-success form-control form-control-alternative" value="Withdraw">
               </div>
             </div>
           </div>
@@ -206,5 +166,109 @@
     </div>
   </div>
 
+  <!-- contributions -->
+  <div class="row mt-5">
+    <div class="col col-xl-6">
+      <div class="card bg-gradient-info shadow">
+        <div class="card-header bg-transparent border-0">
+          <h3 class="text-white mb-0">Outstanding Contributions</h3>
+        </div>
+        <div class="table-responsive bg-gradient-info">
+          <table class="table align-items-center table-flush">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let member of members; let memberIndex=index;">
+                <td>{{ member.firstName }}</td>
+                <td>Ksh. {{ member.outstandingContributions.toLocaleString() }}</td>
+              </tr>
+           </tbody>
+          </table>
+        </div>
 
+      </div>
+    </div>
+
+    <div class="col-xl-6 mb-5 mb-xl-0">
+      <div class="card bg-gradient-info shadow">
+        <div class="card-header bg-transparent">
+          <div class="row align-items-center">
+            <div class="col">
+              <h6 class="text-uppercase ls-1 mb-1">admin</h6>
+              <h2 class="mb-0">Contributions</h2>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="form-group">
+                <input type="button" (click)="createContributions()" id="input-create-contributions" class="btn btn-primary form-control form-control-alternative" value="Create Contributions">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <input type="button" id="input-stop-contributions" class="btn btn-warning form-control form-control-alternative" value="Stop Contributions">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- payout to member -->
+  <div class="row mt-5">
+    <div class="col-xl-6 mb-xl-0">
+      <div class="card shadow wp-card">
+        <div class="card-header bg-transparent">
+          <div class="row align-items-center">
+            <div class="col">
+              <h6 class="text-uppercase ls-1 mb-1">admin</h6>
+              <h2 class="mb-0">Transfer Chama Funds to Member</h2>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label for="input-chama-balance" class="form-control-label">Chama Balance</label>
+                <span class="form-control form-control-alternative text-info text-bold bg-transparent">Ksh. {{ chamaBalance.toLocaleString() }}</span>
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="form-control-label" for="input-first-name">Member</label>
+                <div class="ddown">
+                  <button class="ddown-toggle btn form-control" (click)="toggleDropdown('ddown-content-name-payout')">{{ selectedPayoutee }}</button>
+                  <div class="ddown-content ddown-content-name-payout" style="width: 100%;">
+                    <p *ngFor="let payoutee of membersNamesList" (click)="selectPayoutReceipient(payoutee.name)">{{ payoutee.name }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label class="form-control-label text-white" for="input-transfer-amount">Enter amount</label>
+                <input type="text" name="input-transfer-amount" id="input-transfer-amount" class="form-control form-control-alternative" placeholder="Amount" (input)="amtChange()" [(ngModel)]="payoutAmount">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label class="text-default">.</label>
+                <input (click)="payout()" type="button" id="btn-transfer-funds" class="btn btn-success form-control form-control-alternative" value="Transfer">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

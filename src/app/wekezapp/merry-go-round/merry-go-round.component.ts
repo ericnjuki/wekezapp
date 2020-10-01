@@ -4,6 +4,8 @@ import { User } from 'src/app/shared/user.model';
 import { ChamaService } from 'src/app/services/chama.service';
 import { Chama } from 'src/app/shared/chama.model';
 import { LedgerService } from 'src/app/services/ledger.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { ToastOptions, ToastData, ToastyService } from 'ng2-toasty';
 
 @Component({
   selector: 'app-merry-go-round',
@@ -18,35 +20,40 @@ export class MerryGoRoundComponent implements OnInit {
   dropdownToggle = true;
   disabledMgrMessage = '';
   disbursementSuccess = false;
+  nextReceipient = 'Unknown';
 
   constructor(
     private chamaService: ChamaService,
     private userService: UserService,
-    private ledgerService: LedgerService
+    private ledgerService: LedgerService,
+    private authService: AuthService,
+    private toastyService: ToastyService
     // private route: ActivatedRoute,
     // private router: Router
   ) {}
 
   ngOnInit() {
     this.chamaService.getChama()
-    .subscribe(chama => {
+    .subscribe((chama: Chama) => {
       this.chama = chama;
-      this.disabledMgrMessage = 'Disabled until ' + new Date(this.chama.nextMgrDate).toLocaleDateString();
+      this.chama.mgrAmount = (+chama.mgrAmount).toLocaleString();
+      this.disabledMgrMessage = 'Disabled until ' + this.getMgrDate(0, true) ;
+      this.userService.getAllUsers()
+        .subscribe( users => {
+          const firstIndex = this.chama.nextMgrReceiverIndex;
+          const index = [];
+
+          for (let i = firstIndex; i < users.length; i++) {
+            index.push(i);
+          }
+          for (let i = 0; i < firstIndex; i++) {
+            index.push(i);
+          }
+          this.members = this.membersOrderList = index.map(i => <User>users[i]);
+          this.nextReceipient = this.members[0].firstName;
+      });
     });
 
-    this.userService.getAllUsers()
-      .subscribe( res => {
-        const firstIndex = this.chama.nextMgrReceiverIndex;
-        const index = [];
-
-        for (let i = firstIndex; i < res.length; i++) {
-          index.push(i);
-        }
-        for (let i = 0; i < firstIndex; i++) {
-          index.push(i);
-        }
-        this.members = this.membersOrderList = index.map(i => <User>res[i]);
-    });
 
 
   }
@@ -86,8 +93,12 @@ export class MerryGoRoundComponent implements OnInit {
     }
     this.chamaService.updateChama(this.chama)
     .subscribe(res => {
+      this.addToast('info', 'New order saved');
       console.log('MGR order updated!');
-  });
+    },
+    err => {
+      this.addToast('error', err);
+    });
   }
 
   disburseMgr() {
@@ -106,17 +117,15 @@ export class MerryGoRoundComponent implements OnInit {
     let verdict = true;
 
     if (nextMgrDate <= today) {
-      // console.log(nextMgrDate.toLocaleDateString() + ' is in the past because today is ' + today.toLocaleDateString());
-      // console.log('so we need disabled needs to be false so we can click the disburse button');
+      console.log(nextMgrDate.toLocaleDateString() + ' is in the past because today is ' + today.toLocaleDateString());
+      console.log('so disabled needs to be false so we can click the disburse button');
       verdict = false;
     } else {
-      // console.log(nextMgrDate.toLocaleDateString() + ' is in the future because today is ' + today.toLocaleDateString());
-      // console.log('so disabled needs to be true until some time in the future');
+      console.log(nextMgrDate.toLocaleDateString() + ' is in the future because today is ' + today.toLocaleDateString());
+      console.log('so disabled needs to be true until some time in the future');
       verdict = true;
     }
-
-    // TESTING
-    return false;
+    return verdict;
   }
 
   toggleDropdown(classOrId, dropItemIndex) {
@@ -128,5 +137,40 @@ export class MerryGoRoundComponent implements OnInit {
       dropDownMenu.item(dropItemIndex).setAttribute('style', 'display: none;');
     }
     this.dropdownToggle = this.dropdownToggle ? false : true;
+  }
+
+  addToast(toastType: string, message: string, timeout = 3000) {
+    let toastId;
+    const toastOptions: ToastOptions = {
+      title: '',
+      onAdd: (toast: ToastData) => {
+        toastId = toast.id;
+      }
+    };
+    toastOptions.title = '';
+    toastOptions.msg = message;
+    toastOptions.theme = 'bootstrap';
+    toastOptions.timeout = timeout;
+
+    switch (toastType) {
+      case 'wait':
+        this.toastyService.wait(toastOptions);
+        break;
+      case 'info':
+        this.toastyService.info(toastOptions);
+        break;
+      case 'success':
+        this.toastyService.success(toastOptions);
+        break;
+      case 'warning':
+        this.toastyService.warning(toastOptions);
+        break;
+      case 'error':
+        this.toastyService.error(toastOptions);
+        break;
+      default:
+        this.toastyService.default(toastOptions);
+    }
+    return toastId;
   }
 }

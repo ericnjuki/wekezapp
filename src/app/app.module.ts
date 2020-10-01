@@ -20,6 +20,7 @@ import { ChamaService } from './services/chama.service';
 import { UserService } from './services/user.service';
 import { AdminGuard } from './services/admin-guard.service';
 import { LedgerService } from './services/ledger.service';
+import { ToastyModule } from 'ng2-toasty';
 
 
 @NgModule({
@@ -31,7 +32,11 @@ import { LedgerService } from './services/ledger.service';
     ComponentsModule,
     NgbModule,
     RouterModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ToastyModule.forRoot()
+  ],
+  exports: [
+    ToastyModule
   ],
   declarations: [
     AppComponent,

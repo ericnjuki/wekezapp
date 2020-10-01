@@ -5,7 +5,7 @@
   <div class="container-fluid d-flex align-items-center">
     <div class="row" style="padding-top:5em;">
       <div class="col-lg-7 col-md-10">
-        <h1 class="display-2 text-white">Hello Jane</h1>
+        <h1 class="display-2 text-white">Hello {{ getFirstWord(authService.currentUser.FirstName) }}</h1>
         <p class="text-white mt-0 mb-5">This is your profile page. You can edit your personal information here</p>
       </div>
     </div>
@@ -19,7 +19,8 @@
           <div class="col-lg-3 order-lg-2">
             <div class="card-profile-image">
               <a href="javascript:void(0)">
-                <img src="assets/img/theme/team-4-800x800.jpg" class="rounded-circle">
+                <!-- <img src="./profile.svg" class="rounded-circle"> -->
+                <svg id="wp-profile-icon" class="rounded-circle" style="background-color: white;" width="150" height="150" data-jdenticon-value="icon value"></svg>
               </a>
             </div>
           </div>
@@ -43,7 +44,7 @@
             </h3>
             <div class="h5 mt-4">
               <i class="ni business_briefcase-24 mr-2"></i>
-              <span>{{ authService.currentUser.Role }}</span> - <span>{{ authService.currentUser.ChamaName }}</span>
+              <span>{{ authService.currentUser.Role }}</span> - <span>{{ (chama | async)?.chamaName }}</span>
             </div>
           </div>
         </div>
@@ -74,21 +75,29 @@
               <div class="row">
                 <div class="col-lg-6">
                   <div class="form-group">
-                    <label class="form-control-label" for="input-first-name">First Name</label>
+                    <label class="form-control-label" for="input-first-name">Name</label>
                     <input type="text" [(ngModel)]="userFirstName" name="input-first-name" id="input-first-name" class="form-control form-control-alternative" placeholder="First name">
                   </div>
                 </div>
-                <div class="col-lg-6">
+                <!-- <div class="col-lg-6">
                   <div class="form-group">
                     <label class="form-control-label" for="input-second-name">Second Name</label>
                     <input type="text" [(ngModel)]="userSecondName" name="input-second-name" id="input-second-name" class="form-control form-control-alternative" placeholder="Second name">
+                  </div>
+                </div> -->
+              </div>
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-email">New Password</label>
+                    <input type="password" [(ngModel)]="userPassword" name="input-password" placeholder="Enter New Password" class="form-control form-control-alternative">
                   </div>
                 </div>
               </div>
             </div>
             <hr class="my-4" />
             <div class="pl-lg-4">
-              <a class="btn btn-info" (click)="saveChanges()">Save Changes</a>
+              <a class="btn btn-info text-white" (click)="saveChanges()">Save Changes</a>
             </div>
           </form>
         </div>
