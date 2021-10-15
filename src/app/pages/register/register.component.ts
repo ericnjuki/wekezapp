@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ToastyService } from 'ng2-toasty';
+import { ToastData, ToastOptions, ToastyService } from 'ng2-toasty';
 import { AuthService } from 'src/app/services/auth.service';
-import { addToast } from 'src/app/shared/ng.toasty';
 
 @Component({
   selector: 'app-register',
@@ -10,8 +9,8 @@ import { addToast } from 'src/app/shared/ng.toasty';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-  name = 'Fred Makoha';
-  email = 'a@b.c';
+  name = 'Eric Njuki';
+  email = 'ericnjuki+admin@gmail.com';
   password = '1234';
 
   constructor(
@@ -25,7 +24,7 @@ export class RegisterComponent implements OnInit {
 
   register() {
     // console.log(this.username + ' ' + this.password);
-    const registerToast = addToast('wait', 'Opening account...', 10000);
+    const registerToast = this.addToast('wait', 'Opening account...', 10000);
     this.authService
       .register({
         firstName: this.name,
@@ -47,31 +46,65 @@ export class RegisterComponent implements OnInit {
       .subscribe(result => {
         if (result) {
           this.toastyService.clear(registerToast);
-          const loginToast = addToast('wait', 'Logging you in...', 10000);
           this.authService.login(
             {
               email: this.email,
               password: this.password
             }).
             subscribe(res => {
-              this.toastyService.clear(loginToast);
+              this.toastyService.clear(registerToast);
               if (res) {
-                addToast('success', 'Login Successful', 1000);
+                this.addToast('success', 'Login Successful', 1000);
                 this.router.navigate(['/setup'], {
                   queryParams: { adminUser: this.email }
                 });
               } else {
-                addToast('error', 'Error Logging in', 2000);
+                this.addToast('error', 'Error Logging in', 2000);
                 console.log('login problems...');
               }
             });
         } else {
-          addToast('error', 'Error registering, check server', 3000);
+          this.addToast('error', 'Error registering, check server', 3000);
           console.log('not a 200, so problems');
         }
       }, err => {
-        addToast('error', 'Error registering, check server', 3000);
+        this.addToast('error', 'Error registering, check server', 3000);
         console.log(err);
       });
+  }
+
+  addToast(toastType: string, message: string, timeout = 3000) {
+    let toastId;
+    const toastOptions: ToastOptions = {
+      title: '',
+      onAdd: (toast: ToastData) => {
+        toastId = toast.id;
+      }
+    };
+    toastOptions.title = '';
+    toastOptions.msg = message;
+    toastOptions.theme = 'bootstrap';
+    toastOptions.timeout = timeout;
+
+    switch (toastType) {
+      case 'wait':
+        this.toastyService.wait(toastOptions);
+        break;
+      case 'info':
+        this.toastyService.info(toastOptions);
+        break;
+      case 'success':
+        this.toastyService.success(toastOptions);
+        break;
+      case 'warning':
+        this.toastyService.warning(toastOptions);
+        break;
+      case 'error':
+        this.toastyService.error(toastOptions);
+        break;
+      default:
+        this.toastyService.default(toastOptions);
+    }
+    return toastId;
   }
 }

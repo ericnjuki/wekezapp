@@ -24,7 +24,7 @@ export class LedgerService {
     const confirmerId = this.authService.currentUser.UserId;
     return this.http
     .post(this._url + 'confirmPersonalDeposit/' + transactionId + '/' + confirmerId, true)
-    .pipe(map((response) => response.json()));
+    .pipe(map((response) => response.text()));
   }
 
   requestPersonalWithdrawal(transac) {
@@ -37,7 +37,7 @@ export class LedgerService {
     const confirmerId = this.authService.currentUser.UserId;
     return this.http
     .post(this._url + 'confirmPersonalWithdrawal/' + transactionId + '/' + confirmerId, true)
-    .pipe(map((response) => response.json()));
+    .pipe(map((response) => response.text()));
   }
 
   requestChamaDeposit(transac) {
@@ -51,7 +51,7 @@ export class LedgerService {
     const confirmerId = this.authService.currentUser.UserId;
     return this.http
     .post(this._url + 'confirmChamaDeposit/' + transactionId + '/' + confirmerId, true)
-    .pipe(map((response) => response.json()));
+    .pipe(map((response) => response.text()));
   }
 
   requestChamaWithdrawal(transac) {
@@ -65,7 +65,7 @@ export class LedgerService {
     const confirmerId = this.authService.currentUser.UserId;
     return this.http
     .post(this._url + 'confirmChamaWithdrawal/' + transactionId + '/' + confirmerId, true)
-    .pipe(map((response) => response.json()));
+    .pipe(map((response) => response.text()));
   }
 
 
