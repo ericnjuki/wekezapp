@@ -8,16 +8,19 @@ import { LedgerService } from './ledger.service';
 
 @Injectable()
 export class ChamaService {
-  private _url = 'https://localhost:44380/api/chama/';
+  // private _url = 'https://localhost:44380/api/chama/';
+  private _url = 'http://localhost:3000/chama/';
 
   constructor(private http: Http, private ledgerService: LedgerService) { }
 
   getChama() {
     return this.http.get(this._url)
-    .pipe(map(response => response.json()));
+    .pipe(map(response => {
+      return response.json()[0];
+    }));
   }
 
-  createChama(chamaDto) {
+  createChama(chamaDto: Chama) {
     console.log('adding chama..');
     // return new Observable(subscriber => {
     //   subscriber.next({
@@ -26,7 +29,7 @@ export class ChamaService {
     //   subscriber.complete();
     // });
     return this.http
-      .post(this._url + 'add', chamaDto)
+      .post(this._url, chamaDto)
       // .pipe(map(response => {
       //   if (response.ok) {
       //     return true;
@@ -37,15 +40,15 @@ export class ChamaService {
       ;
   }
 
-  updateChama(chamaDto) {
+  updateChama(chamaDto: Chama) {
     console.log('updating chama: ');
-    console.log(chamaDto);
+    console.log(chamaDto[0]);
     // return new Observable(subscriber => {
     //   subscriber.next(true);
     //   subscriber.complete();
     // });
     return this.http
-      .put(this._url + 'update', chamaDto);
+      .put(this._url + chamaDto[0].ChamaId,  chamaDto);
   }
 
   doTheRegularChecks() {

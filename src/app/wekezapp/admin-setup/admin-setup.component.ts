@@ -12,7 +12,7 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./admin-setup.component.scss']
 })
 export class AdminSetupComponent implements OnInit {
-  setupStepNumber = 1;
+  setupStepNumber = 3;
 
   chamaDto: Chama = new Chama();
   members: User[] = [];

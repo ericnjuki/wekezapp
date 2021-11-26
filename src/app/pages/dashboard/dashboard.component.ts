@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
 import { User } from 'src/app/shared/user.model';
 import { ChamaService } from 'src/app/services/chama.service';
 import { subscribeOn } from 'rxjs/operators';
-import { Chama } from 'src/app/shared/chama.model';
+import { Chama } from '../../../../src/app/shared/chama.model';
 import { ToastOptions, ToastData, ToastyService } from 'ng2-toasty';
 import { addToast } from 'src/app/shared/ng.toasty';
 // import { stat } from 'fs';
@@ -33,6 +33,7 @@ export class DashboardComponent implements OnInit {
   contributionsOwed = 0;
   user = new User();
   userStake = 0;
+  owedByMe = this.contributionsOwed + this.loansOwed;
 
   // stats
   chama = new Chama();
@@ -61,6 +62,8 @@ export class DashboardComponent implements OnInit {
 
     this.userService.findById(this.authService.currentUser.UserId)
     .subscribe((user: User) => {
+      user = this.toCamel(user);
+
       this.contributionsOwed = user.outstandingContributions;
       this.loansOwed = user.outstandingLoans;
       this.amtInAccount = user.balance;
@@ -71,10 +74,15 @@ export class DashboardComponent implements OnInit {
     this.chama.balance = 0;
     this.chamaService.getChama()
     .subscribe((chama: Chama) => {
+      chama = this.toCamel(chama);
+
+      chama.nextMgrDate = new Date(chama.nextMgrDate);
       this.chama = chama;
+
       this.myNextPayoutDate = this.getMgrDate(chama.mgrOrder.indexOf(this.authService.currentUser.UserId), true);
       this.userService.findById(chama.mgrOrder[chama.nextMgrReceiverIndex])
       .subscribe((user: User) => {
+        user = this.toCamel(user);
         this.nextMgrReceiver = user.firstName;
       });
     });
@@ -107,15 +115,24 @@ export class DashboardComponent implements OnInit {
 
   processFlow() {
     this.userService.getFlow()
-    .subscribe(res => {
-      console.log(res);
+    .subscribe((res) => {
+
+      for(let i = 0; i < res.length; i++) {
+        res[i] = this.toCamel(res[i]);
+        res[i].dateCreated = new Date(res[i].dateCreated.toString());
+        res[i].dateModified = new Date(res[i].dateModified);
+      };
+      console.log("resultats: ");
+      console.log(res[0]);
+
       let flowItems = [];
       flowItems = res;
       flowItems.reverse();
 
       for (let i = 0; i < flowItems.length; i++) {
-        const dateCreated = new Date(flowItems[i].dateCreated);
-        flowItems[i].newDateCreated = dateCreated.toDateString();
+        // const dateCreated = new Date(flowItems[i].dateCreated);
+        flowItems[i].newDateCreated = flowItems[i].dateCreated.toDateString();
+        flowItems[i].newDateModified = flowItems[i].dateModified.toDateString();
 
         if (flowItems[i].isConfirmable) {
           switch (flowItems[i].notificationType) {
@@ -259,6 +276,31 @@ export class DashboardComponent implements OnInit {
     // this.salesChart.update();
   }
 
+
+  toCamel(o) {
+    var newO, origKey, newKey, value
+    if (o instanceof Array) {
+      return o.map(function(value) {
+          if (typeof value === "object") {
+            value = this.toCamel(value)
+          }
+          return value
+      })
+    } else {
+      newO = {}
+      for (origKey in o) {
+        if (o.hasOwnProperty(origKey)) {
+          newKey = (origKey.charAt(0).toLowerCase() + origKey.slice(1) || origKey).toString()
+          value = o[origKey]
+          if (value instanceof Array || (value !== null && value.constructor === Object)) {
+            value = this.toCamel(value)
+          }
+          newO[newKey] = value
+        }
+      }
+    }
+    return newO
+  }
 
   addToast(toastType: string, message: string, timeout = 3000) {
     let toastId;

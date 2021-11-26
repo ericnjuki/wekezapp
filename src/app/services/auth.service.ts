@@ -11,7 +11,8 @@ import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthService {
-  private _url = 'https://localhost:44380/api/users/';
+  // private _url = 'https://localhost:44380/api/users/';
+  private _url = 'http://localhost:3000/users/';
   private handleError(error: HttpErrorResponse) {
      if (error.error instanceof ErrorEvent) {
         // A client-side or network error occurred. Handle it accordingly.
@@ -48,7 +49,7 @@ export class AuthService {
     //   subscriber.complete();
     // });
     return this.http
-      .post(this._url + 'register', credentials)
+      .get(this._url + 'register', credentials)
       .pipe(map(response => {
         if (response.ok) {
           return true;
@@ -60,18 +61,18 @@ export class AuthService {
 
   login(credentials: {}) {
     console.log('logging in user...');
-    console.log(credentials);
     return this.http
-      .post(this._url + 'login', credentials)
+      .get(this._url + 'login', credentials)
       .pipe(map(response => {
-        console.log(response);
         const result = response.json();
+        console.log("les resultat: ");
+        console.log(result);
 
         if (result && result.token) {
           localStorage.setItem('token', result.token);
           return true;
-        } else if (result && result.Token) {
-          localStorage.setItem('token', result.Token);
+        } else if (result[0] && result[0].Token) {
+          localStorage.setItem('token', result[0].Token);
           return true;
         }
         return false;

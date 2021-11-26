@@ -10,7 +10,9 @@ import { NotificationType } from '../shared/flow-type.enum';
 
 @Injectable()
 export class UserService {
-  private _url = 'https://localhost:44380/api/users/';
+  // private _url = 'https://localhost:44380/api/users/';
+  private _url = 'http://localhost:3000/users/';
+
   private options: RequestOptions = new RequestOptions();
 
   constructor(private http: Http, private authService: AuthService) {}
@@ -58,7 +60,7 @@ export class UserService {
     console.log('fetching user...');
     return this.http
       .get(this._url + userId)
-      .pipe(map((response) => response.json()));
+      .pipe(map((response) => response.json()[0]));
   }
 
   addUsers(users: User[]) {
@@ -73,7 +75,11 @@ export class UserService {
       'addedBy=' + this.authService.currentUser.UserId
     );
     // console.log('addedBy: ' + this.authService.currentUser.UserId);
-    return this.http.post(this._url + 'addBulk', users, this.options);
+    // return this.http.post(this._url, users, this.options);
+    return new Observable((subscriber) => {
+      subscriber.next([]);
+      subscriber.complete();
+    });
   }
 
   updateUser(user: User) {
@@ -84,11 +90,11 @@ export class UserService {
   }
 
   getFlow() {
-    this.options.params = new URLSearchParams(
-      'userId=' + this.authService.currentUser.UserId
-    );
+    // this.options.params = new URLSearchParams(
+    //   'userId=' + this.authService.currentUser.UserId
+    // );
     return this.http
-      .get(this._url + 'getFlow', this.options)
+      .get(this._url + 'getFlow')
       .pipe(map((response) => response.json()));
 
     // returns:

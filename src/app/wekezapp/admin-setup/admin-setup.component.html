@@ -214,9 +214,9 @@
                     <td>{{ memberIndex + 1 }}</td>
                     <td>
                       <div class="dropdown">
-                        <button class="dropdown-toggle" (click)="toggleDropdown('dropdown-content-name', memberIndex)">{{ member.firstName }}</button>
+                        <button class="dropdown-toggle" (click)="toggleDropdown('dropdown-content-name', memberIndex)">{{ member.FirstName }}</button>
                         <div class="dropdown-content dropdown-content-name">
-                          <p *ngFor="let chamaMember of members; let listIndex=index" (click)="reorderNames(listIndex, memberIndex)">{{ chamaMember.firstName }}</p>
+                          <p *ngFor="let chamaMember of members; let listIndex=index" (click)="reorderNames(listIndex, memberIndex)">{{ chamaMember.FirstName }}</p>
                         </div>
                       </div>
                     </td>
