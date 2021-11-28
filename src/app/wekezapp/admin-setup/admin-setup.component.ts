@@ -5,6 +5,7 @@ import { User } from 'src/app/shared/user.model';
 import { UserService } from 'src/app/services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import * as jdenticon from 'node_modules/jdenticon';
 
 @Component({
   selector: 'app-admin-setup',
@@ -12,7 +13,7 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./admin-setup.component.scss']
 })
 export class AdminSetupComponent implements OnInit {
-  setupStepNumber = 3;
+  setupStepNumber = 1;
 
   chamaDto: Chama = new Chama();
   members: User[] = [];
@@ -25,8 +26,8 @@ export class AdminSetupComponent implements OnInit {
   // step 2 (members + info)
   dropdownToggle = true;
   roleText = '<Role>';
-  name = 'Jane Doe';
-  email = 'ericnjuki@gmail.com';
+  name = 'John Doe';
+  email = 'johndoe@gmail.com';
   personalAmt = 1000.25;
   totalAmt = 0;
 
@@ -49,6 +50,8 @@ export class AdminSetupComponent implements OnInit {
 
   ngOnInit() {
     const usr = this.route.snapshot.queryParamMap.get('adminUser');
+    document.getElementById('wp-navbar-icon').setAttribute('data-jdenticon-value', this.authService.currentUser.UserId);
+    jdenticon();
     // this.userService.findByUsername(usr).subscribe((admin: User) => {
     //   console.log(admin);
     //   this.members.push(admin);
@@ -156,28 +159,28 @@ export class AdminSetupComponent implements OnInit {
     this.members = [
       {
         firstName: 'Jane Dora',
-        email: 'ericnjuki+jane@gmail.com',
+        email: 'janedorawekezapp@gmail.com',
         password: 'secure123',
         balance: 6660,
         role: 'Secretary'
       },
       {
         firstName: 'Kevin Llama',
-        email: 'ericnjuki+kevin@gmail.com',
+        email: 'kevinwekezapp@gmail.com',
         password: 'secure123',
         balance: 2400,
         role: 'Treasurer'
       },
       {
         firstName: 'Aspen Awesome',
-        email: 'ericnjuki+aspen@gmail.com',
+        email: 'aspenwekezapp@gmail.com',
         password: 'secure123',
         balance: 4321,
         role: 'Member'
       },
       {
         firstName: 'Sam Wise',
-        email: 'ericnjuki+sam@gmail.com',
+        email: 'samwisewekezapp@gmail.com',
         password: 'secure123',
         balance: 1123.5,
         role: 'Member'

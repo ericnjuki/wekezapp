@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 @Injectable()
 export class AuthService {
   // private _url = 'https://localhost:44380/api/users/';
-  private _url = 'http://localhost:3000/users/';
+  private _url = 'https://wekezapp-mock.herokuapp.com/users/';
   private handleError(error: HttpErrorResponse) {
      if (error.error instanceof ErrorEvent) {
         // A client-side or network error occurred. Handle it accordingly.
@@ -65,8 +65,6 @@ export class AuthService {
       .get(this._url + 'login', credentials)
       .pipe(map(response => {
         const result = response.json();
-        console.log("les resultat: ");
-        console.log(result);
 
         if (result && result.token) {
           localStorage.setItem('token', result.token);
@@ -117,7 +115,6 @@ export class AuthService {
     if (!token) {
       return null;
     }
-
     return jwtHelper.decodeToken(token);
       // returns:
       // Email: "a@b.c"

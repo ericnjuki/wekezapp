@@ -122,8 +122,6 @@ export class DashboardComponent implements OnInit {
         res[i].dateCreated = new Date(res[i].dateCreated.toString());
         res[i].dateModified = new Date(res[i].dateModified);
       };
-      console.log("resultats: ");
-      console.log(res[0]);
 
       let flowItems = [];
       flowItems = res;

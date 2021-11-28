@@ -9,8 +9,8 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-  name = 'Eric Njuki';
-  email = 'ericnjuki+admin@gmail.com';
+  name = 'Eric Dev';
+  email = 'ericwekezapp@gmail.com';
   password = '1234';
 
   constructor(

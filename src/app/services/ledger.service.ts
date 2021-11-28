@@ -9,7 +9,7 @@ import { NotificationType } from '../shared/flow-type.enum';
 
 @Injectable()
 export class LedgerService {
-  private _url = 'https://localhost:44380/api/ledger/';
+  private _url = 'https://wekezapp-mock.herokuapp.com/ledger/';
   private options: RequestOptions = new RequestOptions();
 
   constructor(private http: Http, private authService: AuthService, private userService: UserService) { }
@@ -43,6 +43,10 @@ export class LedgerService {
   requestChamaDeposit(transac) {
     transac.DepositorId = this.authService.currentUser.UserId;
     console.log(transac);
+    return new Observable((subscriber) => {
+      subscriber.next([]);
+      subscriber.complete();
+    });
     return this.http
     .post(this._url + 'requestChamaDeposit', transac);
   }
@@ -57,6 +61,10 @@ export class LedgerService {
   requestChamaWithdrawal(transac) {
     transac.WithdrawerId = this.authService.currentUser.UserId;
     console.log(transac);
+    return new Observable((subscriber) => {
+      subscriber.next([]);
+      subscriber.complete();
+    });
     return this.http
     .post(this._url + 'requestChamaWithdrawal', transac);
   }
@@ -134,7 +142,7 @@ export class LedgerService {
 
   createMgr() {
     return this.http
-    .get(this._url + 'createMgr')
+    .get(this._url)
     .pipe(map((response) => response.json()));
   }
 
@@ -144,12 +152,20 @@ export class LedgerService {
     );
 
     console.log(transactionId);
+    return new Observable((subscriber) => {
+      subscriber.next([]);
+      subscriber.complete();
+    });
     return this.http
     .post(this._url + 'disburseMgr/' + transactionId, true)
     .pipe(map((response) => response.json()));
   }
 
   createContributions() {
+    return new Observable((subscriber) => {
+      subscriber.next([]);
+      subscriber.complete();
+    });
     return this.http
     .get(this._url + 'createContributions');
   }
@@ -168,6 +184,10 @@ export class LedgerService {
 
   payout(userId, amount) {
     console.log(userId + ',' + amount);
+    return new Observable((subscriber) => {
+      subscriber.next({});
+      subscriber.complete();
+    });
     return this.http
     .post(this._url + 'payout/' + userId + '/' + amount + '/' + this.authService.currentUser.UserId, true)
     .pipe(map((response) => response.json()));

@@ -11,7 +11,7 @@ import { NotificationType } from '../shared/flow-type.enum';
 @Injectable()
 export class UserService {
   // private _url = 'https://localhost:44380/api/users/';
-  private _url = 'http://localhost:3000/users/';
+  private _url = 'https://wekezapp-mock.herokuapp.com/users/';
 
   private options: RequestOptions = new RequestOptions();
 
@@ -86,6 +86,7 @@ export class UserService {
     user.updatedBy = this.authService.currentUser.UserId;
     console.log('updating user...');
     console.log(user);
+    return this.findById(user.userId);
     return this.http.put(this._url, user);
   }
 

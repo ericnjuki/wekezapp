@@ -34,12 +34,15 @@ export class MerryGoRoundComponent implements OnInit {
 
   ngOnInit() {
     this.chamaService.getChama()
-    .subscribe((chama: Chama) => {
-      this.chama = chama;
-      this.chama.mgrAmount = (+chama.mgrAmount).toLocaleString();
+    .subscribe((chama) => {
+      this.chama = this.toCamel(chama);
+      this.chama.mgrAmount = (+this.chama.mgrAmount).toLocaleString();
       this.disabledMgrMessage = 'Disabled until ' + this.getMgrDate(0, true) ;
       this.userService.getAllUsers()
         .subscribe( users => {
+          for(let i = 0; i < users.length; i++) {
+            users[i] = this.toCamel(users[i]);
+          }
           const firstIndex = this.chama.nextMgrReceiverIndex;
           const index = [];
 
@@ -117,12 +120,12 @@ export class MerryGoRoundComponent implements OnInit {
     let verdict = true;
 
     if (nextMgrDate <= today) {
-      console.log(nextMgrDate.toLocaleDateString() + ' is in the past because today is ' + today.toLocaleDateString());
-      console.log('so disabled needs to be false so we can click the disburse button');
+      // console.log(nextMgrDate.toLocaleDateString() + ' is in the past because today is ' + today.toLocaleDateString());
+      // console.log('so disabled needs to be false so we can click the disburse button');
       verdict = false;
     } else {
-      console.log(nextMgrDate.toLocaleDateString() + ' is in the future because today is ' + today.toLocaleDateString());
-      console.log('so disabled needs to be true until some time in the future');
+      // console.log(nextMgrDate.toLocaleDateString() + ' is in the future because today is ' + today.toLocaleDateString());
+      // console.log('so disabled needs to be true until some time in the future');
       verdict = true;
     }
     return verdict;
@@ -137,6 +140,31 @@ export class MerryGoRoundComponent implements OnInit {
       dropDownMenu.item(dropItemIndex).setAttribute('style', 'display: none;');
     }
     this.dropdownToggle = this.dropdownToggle ? false : true;
+  }
+
+  toCamel(o) {
+    var newO, origKey, newKey, value
+    if (o instanceof Array) {
+      return o.map(function(value) {
+          if (typeof value === "object") {
+            value = this.toCamel(value)
+          }
+          return value
+      })
+    } else {
+      newO = {}
+      for (origKey in o) {
+        if (o.hasOwnProperty(origKey)) {
+          newKey = (origKey.charAt(0).toLowerCase() + origKey.slice(1) || origKey).toString()
+          value = o[origKey]
+          if (value instanceof Array || (value !== null && value.constructor === Object)) {
+            value = this.toCamel(value)
+          }
+          newO[newKey] = value
+        }
+      }
+    }
+    return newO
   }
 
   addToast(toastType: string, message: string, timeout = 3000) {

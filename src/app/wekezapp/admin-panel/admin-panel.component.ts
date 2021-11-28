@@ -47,8 +47,11 @@ export class AdminPanelComponent implements OnInit {
   ngOnInit() {
     this.userService.getAllUsers()
     .subscribe(users => {
+      for(let i = 0; i < users.length; i++) {
+        users[i] = this.toCamel(users[i]);
+      }
       this.members = users;
-      users.forEach(user => {
+      this.members.forEach(user => {
         this.membersNamesList.push({id: user.userId, name: user.firstName});
       });
     });
@@ -77,9 +80,12 @@ export class AdminPanelComponent implements OnInit {
 
       this.userService.getAllUsers()
       .subscribe(users => {
+        for(let i = 0; i < users.length; i++) {
+          users[i] = this.toCamel(users[i]);
+        }
         this.members = users;
         this.membersNamesList = [];
-        users.forEach(user => {
+        this.members.forEach(user => {
           this.membersNamesList.push({id: user.userId, name: user.firstName});
         });
       });
@@ -205,6 +211,31 @@ export class AdminPanelComponent implements OnInit {
     this.payoutAmount = +this.payoutAmount.replace(/,/g, '');
     const n5 = this.payoutAmount.toLocaleString();
     this.payoutAmount = n5;
+  }
+
+  toCamel(o) {
+    var newO, origKey, newKey, value
+    if (o instanceof Array) {
+      return o.map(function(value) {
+          if (typeof value === "object") {
+            value = this.toCamel(value)
+          }
+          return value
+      })
+    } else {
+      newO = {}
+      for (origKey in o) {
+        if (o.hasOwnProperty(origKey)) {
+          newKey = (origKey.charAt(0).toLowerCase() + origKey.slice(1) || origKey).toString()
+          value = o[origKey]
+          if (value instanceof Array || (value !== null && value.constructor === Object)) {
+            value = this.toCamel(value)
+          }
+          newO[newKey] = value
+        }
+      }
+    }
+    return newO
   }
 
   addToast(toastType: string, message: string, timeout = 3000) {

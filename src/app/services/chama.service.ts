@@ -9,7 +9,7 @@ import { LedgerService } from './ledger.service';
 @Injectable()
 export class ChamaService {
   // private _url = 'https://localhost:44380/api/chama/';
-  private _url = 'http://localhost:3000/chama/';
+  private _url = 'https://wekezapp-mock.herokuapp.com/chama/';
 
   constructor(private http: Http, private ledgerService: LedgerService) { }
 
@@ -28,6 +28,7 @@ export class ChamaService {
     //   });
     //   subscriber.complete();
     // });
+    return this.getChama();
     return this.http
       .post(this._url, chamaDto)
       // .pipe(map(response => {
@@ -42,13 +43,14 @@ export class ChamaService {
 
   updateChama(chamaDto: Chama) {
     console.log('updating chama: ');
-    console.log(chamaDto[0]);
+    console.log(chamaDto);
     // return new Observable(subscriber => {
     //   subscriber.next(true);
     //   subscriber.complete();
     // });
+    chamaDto = this.toCamel(chamaDto);
     return this.http
-      .put(this._url + chamaDto[0].ChamaId,  chamaDto);
+      .put(this._url + chamaDto.chamaId,  chamaDto);
   }
 
   doTheRegularChecks() {
@@ -70,5 +72,30 @@ export class ChamaService {
     });
 
     return statusReport;
+  }
+
+  toCamel(o) {
+    var newO, origKey, newKey, value
+    if (o instanceof Array) {
+      return o.map(function(value) {
+          if (typeof value === "object") {
+            value = this.toCamel(value)
+          }
+          return value
+      })
+    } else {
+      newO = {}
+      for (origKey in o) {
+        if (o.hasOwnProperty(origKey)) {
+          newKey = (origKey.charAt(0).toLowerCase() + origKey.slice(1) || origKey).toString()
+          value = o[origKey]
+          if (value instanceof Array || (value !== null && value.constructor === Object)) {
+            value = this.toCamel(value)
+          }
+          newO[newKey] = value
+        }
+      }
+    }
+    return newO
   }
 }
