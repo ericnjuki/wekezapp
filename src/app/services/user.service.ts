@@ -1,17 +1,17 @@
-import { Injectable } from '@angular/core';
-import { JwtHelper, tokenNotExpired } from 'angular2-jwt';
-import { Http, RequestOptions, URLSearchParams } from '@angular/http';
-import { map } from 'rxjs/operators';
-import { Chama } from '../shared/chama.model';
-import { User } from '../shared/user.model';
-import { Observable } from 'rxjs';
-import { AuthService } from './auth.service';
-import { NotificationType } from '../shared/flow-type.enum';
+import { Injectable } from "@angular/core";
+import { JwtHelper, tokenNotExpired } from "angular2-jwt";
+import { Http, RequestOptions, URLSearchParams } from "@angular/http";
+import { map } from "rxjs/operators";
+import { Chama } from "../shared/chama.model";
+import { User } from "../shared/user.model";
+import { Observable } from "rxjs";
+import { AuthService } from "./auth.service";
+import { NotificationType } from "../shared/flow-type.enum";
 
 @Injectable()
 export class UserService {
   // private _url = 'https://localhost:44380/api/users/';
-  private _url = 'https://wekezapp-mock.herokuapp.com/users/';
+  private _url = "https://wekezapp-mock-api-production.up.railway.app/users/";
 
   private options: RequestOptions = new RequestOptions();
 
@@ -22,33 +22,33 @@ export class UserService {
     return new Observable((subscriber) => {
       subscriber.next([
         {
-          userId: '1',
-          firstName: 'Fred Makoha',
-          secondName: '',
-          email: 'a@b.c',
-          role: 'Chairperson',
-          token: 'token',
-          balance: '1500',
+          userId: "1",
+          firstName: "Fred Makoha",
+          secondName: "",
+          email: "a@b.c",
+          role: "Chairperson",
+          token: "token",
+          balance: "1500",
           nextMGR: new Date(),
         },
         {
-          userId: '2',
-          firstName: 'Francine Makoha',
-          secondName: '',
-          email: 'francine@b.c',
-          role: 'Member',
-          token: 'token',
-          balance: '1000',
+          userId: "2",
+          firstName: "Francine Makoha",
+          secondName: "",
+          email: "francine@b.c",
+          role: "Member",
+          token: "token",
+          balance: "1000",
           nextMGR: new Date(),
         },
         {
-          userId: '3',
-          firstName: 'Beatrice Nyaga',
-          secondName: '',
-          email: 'beatrice@b.c',
-          role: 'Member',
-          token: 'token',
-          balance: '750',
+          userId: "3",
+          firstName: "Beatrice Nyaga",
+          secondName: "",
+          email: "beatrice@b.c",
+          role: "Member",
+          token: "token",
+          balance: "750",
           nextMGR: new Date(),
         },
       ]);
@@ -57,14 +57,14 @@ export class UserService {
   }
 
   findById(userId) {
-    console.log('fetching user...');
+    console.log("fetching user...");
     return this.http
       .get(this._url + userId)
       .pipe(map((response) => response.json()[0]));
   }
 
   addUsers(users: User[]) {
-    console.log('users being posted: ');
+    console.log("users being posted: ");
     console.log(users);
 
     // return new Observable(subscriber => {
@@ -72,7 +72,7 @@ export class UserService {
     //   subscriber.complete();
     // });
     this.options.params = new URLSearchParams(
-      'addedBy=' + this.authService.currentUser.UserId
+      "addedBy=" + this.authService.currentUser.UserId
     );
     // console.log('addedBy: ' + this.authService.currentUser.UserId);
     // return this.http.post(this._url, users, this.options);
@@ -84,7 +84,7 @@ export class UserService {
 
   updateUser(user: User) {
     user.updatedBy = this.authService.currentUser.UserId;
-    console.log('updating user...');
+    console.log("updating user...");
     console.log(user);
     return this.findById(user.userId);
     return this.http.put(this._url, user);
@@ -95,7 +95,7 @@ export class UserService {
     //   'userId=' + this.authService.currentUser.UserId
     // );
     return this.http
-      .get(this._url + 'getFlow')
+      .get(this._url + "getFlow")
       .pipe(map((response) => response.json()));
 
     // returns:
@@ -110,11 +110,13 @@ export class UserService {
 
   getFlowOfType(notificationType: NotificationType) {
     this.options.params = new URLSearchParams(
-      'userId=' + this.authService.currentUser.UserId +
-      '&notificationType=' + notificationType
+      "userId=" +
+        this.authService.currentUser.UserId +
+        "&notificationType=" +
+        notificationType
     );
     return this.http
-      .get(this._url + 'getFlowOfType', this.options)
+      .get(this._url + "getFlowOfType", this.options)
       .pipe(map((response) => response.json()));
   }
 }

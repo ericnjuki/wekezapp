@@ -1,3 +1,7 @@
 Wekezapp is a welfare groups (chamas) management app.
 
-Powered by [Argon Dashboard](https://demos.creative-tim.com/argon-dashboard-angular)
+```
+nvm use 12
+npm i
+ng serve
+```
